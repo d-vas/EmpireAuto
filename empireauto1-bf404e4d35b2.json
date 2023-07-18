@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "empireauto1",
+  "private_key_id": "bf404e4d35b24cd767fe786839fe31e59a014de9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCtcDTLjkFrNDSK\nfUOD0tKSmW95rY6yg0Mdbx7fXf9GRIe0SEr9cuvv6fMGTaLlh5yZ5Wa6MyR5KqTb\nJ0Eonj8bXOO/Lg7qNc3Ipgqgl+wpVzSu2VoBIVHKb+bnvhyLCFeJWfUYef30tW7a\n30MXTx2uq9E3gGatlT9f6eVCsyPSvdC3cyqpFGiBdL21ziISI/J9W7dZsAPvVNLc\nhmupIjjRQaM4gErzpZUW0AXFGyGxhcSQXRl3OEjchaMaDfmL1u5D9TNdl757kKNl\nP2yg+tgXBHdol7SDmCmp0bECiMmcqw9WAVjVtKryIqeH96ctZgg5q3YT01E/r/X0\njBrS8WOnAgMBAAECggEAHwJoVhq1pJq9aCN0Xk3j21U2oq0+zbj9V3ZmMS6ntSMM\nllW0nrMc7xTHoFFiNiK0g6mJ3/HD7CwNNKfElSQSCWzmxWhRP1vmUqEpVkRDc7LF\nVxvCZWBVNNokETwi81LG/+ZHFZy+JLIJw3VWlATPvEq5CfDZquB758S0emP4HDYL\ne0LVTlrt5GpTzcNVdaSAH+vsV6gChLIvyb493DJxksyXmSGVXC+pJnSHxB3m209b\naRRn6buhi0/e49yxJuY6rWrulIYr+ASBB8qGYN2689dN0ffcGTLIABRTPqCO2grL\nmcS9ytCLe3uGprb3BQmeAtOafaftdGAdIVscac0FZQKBgQDdDHStSFYs4mk1wVZv\n3fDf0OzbAkgXVtbAVjsoAyHJ8dqvFse0iMjn1Ny6QqRw/PFbBKAkPuPF7A9+j0vA\nyrHvLgsJ+35eb1MVmVOhgUBooQpu027HXCR2PUPMftaFUwvb7UvUjlULPZvEsr3V\n3pQzXsFJgZ/Ymuouq8UCBeL1bQKBgQDI3Jej8iJYKyvRL7RZ7c6k8gRNy2uXPkdr\nuB3wY2oPhi8BByOvXI/wwOGgVHh7ete1jiU3ENyB04l8A9Yt4h2AQbeE0Q7Sqt2y\nO2XGs8E2TkjpNuId3LmCwCAZ3hLSrXOZxlzNjf0d/risiUUYyE+/2Y7EeORvV0Fs\n2Lc9kpJU4wKBgDjslTtujmqen7NtJ4JFaFtq5SP9MW15OnJrgm5qaBAmTUebmTAf\nrYUuJu18bfZ+3PSwe0D6RRPaF59i7YIncK0EcWlPr5pIFuBQDN5hd6G6HwKtRjDm\nxKkCW+xUmY/Z9Ard0BJb2QC9C9kaopJp8EZOV35DeFOCiV4dc+1ycKD9AoGABLeB\nbB0sh0uEPOZU4uO9vYvdZAJJ5YRV4waw1UtQW0r4YZrMULroumudIMm7BpNM63uK\nDi/8LaRNDzd72Rn9PVzNtXW/Vl0i1aOlcTQZbnAKMEfUqYTcamCeoFzhrkbadxr8\nZOtXrVOk/JBAqiNSFBxEyQJZwu+Wnrq8GtsNSqcCgYAEowaTD6qh88ZBpyW5l58L\nMVSEwbhIOnLETpYXO6BJJiA9nsuMzSyDSP9L6hXU33KPRAuxbkT/w8oYUbA5SZGc\nWt3CERu84gUHf9sa/9NJp6autxysPWgSwaLY2636HDpr7jOyy46vA/kd8oUF0ILv\noa+vLP+EIEJOriAoRCVikg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "empireauto-vas@empireauto1.iam.gserviceaccount.com",
+  "client_id": "114595800189868413548",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/empireauto-vas%40empireauto1.iam.gserviceaccount.com"
+}
