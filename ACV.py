@@ -1,7 +1,8 @@
-from selenium.webdriver.common.by import By
-from selenium import webdriver
-from selenium.webdriver.support.ui import Select
 import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
+import settings
 
 username = 'empire120@gmail.com'
 password = 'TRANz@1212'
@@ -9,13 +10,15 @@ password = 'TRANz@1212'
 # login_url = 'https://odd-fire-7909.auth0.com/u/login?state=hKFo2SB2ekplRUVmc1NlT3NSVVhlYjFKVnl4YzdSYklyUTNHZaFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIGhDZWlLcWxIR3R6Rm9nblV5WkdiajVLeGVBSl9zUTR6o2NpZNkgTWJjY1pTQ1djY01WSXZtVDJYZG9PQlVhSDFkUml5Rko'
 data_url = 'https://transport-v1.acvauctions.com/jobs/available.php'
 
-browser = webdriver.Chrome('.chromedriver.exe')
+# browser = webdriver.Chrome('.chromedriver.exe')
+browser = webdriver.Chrome()
+
 # browser = webdriver.Chrome(executable_path='C:/Users/EMPIR/PycharmProjects/EmpireAuto/chromedriver.exe')
 browser.get(data_url)
-if browser.find_element(By.CLASS_NAME, "ceacd4d8b"):
+if browser.find_element(By.CLASS_NAME, "c7e7bd22b"):
     browser.find_element(By.ID, "username").send_keys("empire120@gmail.com")
     browser.find_element(By.ID, "password").send_keys("TRANz@1212")
-    browser.find_element(By.CLASS_NAME, "c6d5cc3be").click()
+    browser.find_element(By.CLASS_NAME, "cf0cbcb69").click()
 
 # show_all
 select_element = Select(browser.find_element(By.ID, "perpage"))
