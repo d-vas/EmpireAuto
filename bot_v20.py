@@ -33,6 +33,8 @@ load = {'load_id': None,
         'terminal_date': None,
         'milage_1': None,
         'milage_2': None,
+        'load_status': None,
+        'current_terminal': None
         }
 
 cars = {}
@@ -45,22 +47,54 @@ client = gspread.authorize(credentials)
 sheet = client.open("EmpireAuto/firstsheet").worksheet('Sheet4')
 
 
-def headers_list_new_row(sheet, load):
+def get_drivers(text, load, activity, loc_text):
+
+    ''' current_driver '''
+    if 'Assigned' in loc_text:
+        load['current_driver'] = ' '.join(re.findall(r"\bAssigned to \w+\s+\w+\b", text)[0].split()[-2:])
+    else:
+        load['current_driver'] = 'driver not assigned'
+
+
+
+    if load['terminal']:
+            driver_2_pattern = r"\w+ \w+ marked the order as delivered to destination"
+            load['driver_2'] = ' '.join(re.findall(driver_2_pattern, activity)[0].split()[:2])
+
+            driver_1_pattern = r"\w+ \w+ marked the order as delivered to terminal"
+            load['driver_1'] = ' '.join(re.findall(driver_1_pattern, activity)[0].split()[:2])
+    # else load['driver_1'] = load['current_driver']
+
+
+    # activity = text.split('Activity')[1]
+    # if 'marked the order as delivered to' in activity:
+    #     load['driver2'] = activity.split('marked the order as delivered to destination')[0].split('\n')[-1]
+
+    # drivers = re.findall(r'\b[A-Z]+\s[A-Z]+\b', activity)
+    # drivers_pu = re.findall(r'\b[A-Z]+\s[A-Z]+ marked the order as picked up from origin', activity)
+
+    # for i in range(len(drivers_pu)):
+    #     drivers_pu[i] = ' '.join(drivers_pu[i].split()[0:2])
+
+def headers_list_new_row(dict_):
     new_row = []
     headers = sheet.row_values(1)
-    print(headers)
 
-    for column in headers:
-        new_row.append(load[column])
-    sheet.append_row(new_row)
+    # for column in headers:
+        # new_row = new_row.append(dict_[column])
+    # print(new_row)
+    # sheet.append_row(new_row)
 
 def add_row(row_list, sheet):
     sheet.append_row(row_list)
 
 
-def print_dict(dict_):
-    for i in dict_:
-        print(i, ':', dict_[i])
+def get_terminal(activity):
+    if 'terminal' in activity:
+        load['terminal'] = activity.split('terminal')[1].split()[0]
+    else:
+        load['terminal'] = ''
+
 
 
 def msg_from_dict(dict_):
@@ -76,24 +110,26 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         rf"Hi {user.mention_html()}!",)
 
 
-def get_locations(text):
-    loc_text = text.split('Internal Load ID:')[1].strip().split('Vehicle')[0]
-    zip_code_pattern = r'^\d{5}(?:-\d{4})?$'
-    address_pattern = r"\n\d+\s+\w+\s*\w*\b,\w*\s+\w+,\s+[A-Z]{2}\s+\d{5}\n"
+def get_dates(text):
+    pu_pattern = r"Picked Up on\n\w{3} \d{1,}, \d{2,4}"
+    del_pattern = r"Delivered on\n\w{3} \d{1,}, \d{2,4}"
+    if 'Picked Up on' in text:
+        load['pu_date'] = re.findall(pu_pattern, text)[0].split('\n')[1]
+    if 'Delivered on' in text:
+        load['del_date'] = re.findall(del_pattern, text)[0].split('\n')[1]
 
-    # print(repr(loc_text))
 
-    if 'Assigned to' in loc_text:
-        load['pu_name'] = loc_text.split('\n')[3]
-        load['pu_address'] = loc_text.split('\n')[4]
-    else:
-        load['pu_name'] = loc_text.split('\n')[2]
-        load['pu_address'] = loc_text.split('\n')[3]
 
-    '''load['pu_address'] = text.split('Internal Load ID:')[1].strip().split('\n')[3]
-    load['del_name'] = text.split('cheduled')[1].strip().split('cheduled')[0].strip().split('\n')[-3]
-    load['del_address'] = text.split('cheduled')[1].strip().split('cheduled')[0].strip().split('\n')[-2]'''
+def get_locations(loc_text):
+    address_pattern = r"\d+\s+\w+\s*\w*\s*\w*\s*\w*.*\b,\s*\w*\w*\s+\w+,\s+[A-Z]{2}\s+\d{5}"
+    load['pu_address'], load['del_address'] = re.findall(address_pattern, loc_text)
 
+'''
+    pu_name = loc_text.split('cheduled pickup date')[0].split('\n')[-3]
+    del_name = loc_text.split('cheduled delivery date')[0].split('\n')[-3]
+    print(pu_name)
+    print(del_name)
+'''
 
 def get_cars(text):
     cars_txt = text.split('Price')[1].strip().split('Payment')[0]
@@ -111,102 +147,42 @@ def get_cars(text):
 
         cars[key].append(temp_list[-2])
         cars[key].append(temp_list[-1])
-        # work_text = work_text.split(vin_list[i-1])[1]
-
 
         vins = '\n'.join(vin_list)
-        print(vins)
 
         load['vin'] = vin_list
     return vin_list
 
 
-def parse_super_disp_1load(update, text, load=load):
+def parse_super_disp_1load(update, text, load):
+    loc_text = text.split('Internal Load ID:')[1].strip().split('Vehicle Details')[0].split('\n\n')[1]
+    print(repr(loc_text))
+    activity = text.split('Activity')[1]
+
     load.clear()
+    cars.clear()
 
-
-    '''list_ = []
-    for i in cars_txt.split('\n'):
-        if i not in ['', ' ', '\n', '\t', '\r\n', '\r']:
-            list_.append(i)
-    list_ = list_[:-2] #temporary work car list
-    cars_list = []
-    for i in range(len(list_)//4):
-        cars_list.append(list_[i:i+4])
-        i += -1
-
-    work_text = cars_txt[:]'''
-
-    load['load_id'] = text.split('Reports')[1].strip().split('\n')[0]
+    load['load_id'] = text.split('Help')[1].strip().split('\n')[0]
     load['internal_load_id'] = text.split('Internal Load ID:')[1].strip().split('\n')[0].strip()
     load['load_status'] = text.split('Reports')[1].split('Internal Load ID:')[0].strip().split('\n')[-1]
-
-    '''if 'terminal' in text:
-        load['current_terminal'] = text.split('Reports')[1].strip().split('\n')[2]'''
-
-    # print(text.split('Payment', maxsplit=1)[1].split('Method')[0])
     load['rate'] = text.split('Payment', maxsplit=1)[1].split('Method')[0].split('\n')[-2].strip()
+
     if 'Customer Information' in text:
         load['customer'] = text.split('Customer Information')[1].strip().split('\n')[0]
     else:
         load['customer'] = 'NO CUSTOMER'
 
-
-
     load['date_create'] = text.split('was')[-1].split('\n')[1]
-    if 'Assigned' in text:
-        load['current_driver'] = text.split('Assigned to ')[1].split('\n')[0]
-    else:
-        load['current_driver'] = 'driver not assigned'
-
-    activity = text.split('Activity')[1]
-
-    if 'marked the order as delivered to' in activity:
-        load['driver2'] = activity.split('marked the order as delivered to destination')[0].split('\n')[-1]
-
-    drivers = re.findall(r'\b[A-Z]+\s[A-Z]+\b', activity)
-    drivers_pu = re.findall(r'\b[A-Z]+\s[A-Z]+ marked the order as picked up from origin', activity)
-
-    for i in range(len(drivers_pu)):
-        drivers_pu[i] = ' '.join(drivers_pu[i].split()[0:2])
-        # print(i)
 
 
-    if 'terminal' in activity:
-        load['terminal'] = activity.split('terminal')[1].split()[0]
-    else:
-        load['terminal'] = ''
 
-
-    '''
-    if 'marked the order as delivered to' in activity:
-        drivers = re.findall(r'[A-Z]+\s[A-Z]+\smarked the order as delivered to', activity)
-        drivers = list(map(lambda x: x.strip('marked the order as delivered to'), drivers))
-        print(drivers)
-        load['driver1'] = drivers[-1]
-        if len(drivers) > 1:
-            load['driver2'] = drivers[0]
-        else:
-            load['driver2'] = ''
-    if load['driver1']:
-        spliter = f"{load['driver1']} marked the order as picked up from origin"
-        load['pu_date_time'] = activity.split(spliter)[1].split('\n\n')[0].strip()
-    if load['driver2']:
-        spliter = f"{load['driver2']} marked the order as delivered to destination"
-        load['del_date_time'] = activity.split(spliter)[1].split('\n\n')[0].strip()
-    '''
-
-    load['del_date_terminal'] = ''
 
     # add_row(list(load.keys()), sheet=sheet)
-
-
-
-    print(re.findall(r'\n\d+\s+\w+\s*\s+\w+,\s+[A-Z]{2}\s+\d{5}\n', text))
-
-    get_cars(text=text)
-
-    get_locations(text)
+    get_terminal(activity)
+    get_cars(text)
+    get_drivers(loc_text, load, activity, loc_text)
+    get_locations(loc_text)
+    get_dates(loc_text)
 
     return f"{msg_from_dict(load)}\n{msg_from_dict(cars)}"
 
@@ -217,6 +193,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
 
 def main():
+    headers_list_new_row(load)
     application = Application.builder().token(TOKEN).build()
     application.add_handler(CommandHandler("start", start))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
