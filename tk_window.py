@@ -1,21 +1,13 @@
 import tkinter as tk
-import re
 
 
 req_pu = {'city': '', 'state': '', 'zip': ''}
 req_del = {'city': '', 'state': '', 'zip': ''}
 
-'''
-def get_split_locations(loc_text, req_dict):
-    # print(loc_text.strip())
-    address_pattern = r"\w*\s*\w*\s*\w+,\s+[A-Z]{2}(\s*\d{5})*"
-    # print(re.findall(address_pattern, loc_text)[0], end='\n')
-    # return re.findall(address_pattern, loc_text)[0]
-'''
-
 
 def get_location(loc_text, req_dict):
-    req_dict.clear()
+    for key in req_dict:
+        req_dict[key] = ''
     loc_text = loc_text.strip()
     if loc_text.rsplit(' ', 1)[1].isdigit():
         req_dict['zip'] = int(loc_text.rsplit(' ', 1)[1])
@@ -24,7 +16,7 @@ def get_location(loc_text, req_dict):
     elif loc_text.rsplit(' ', 1)[1].isupper() and len(loc_text.rsplit(' ', 1)[1]) == 2:
         req_dict['state'] = loc_text.rsplit(' ', 1)[1]
         req_dict['city'] = loc_text.rsplit(' ', 1)[0].strip(',')
-    print(req_dict)
+    print(str(req_dict), req_dict)
 
 
 def save_entry_value():
@@ -54,10 +46,10 @@ root.attributes('-topmost', True)
 center_window(root, 350, 350)
 
 label_PU = tk.Label(root, text="PU")
-entry_pu = tk.Entry(root, width=30)
+entry_pu = tk.Entry(root, width=50)
 
 label_DEL = tk.Label(root, text="DEL")
-entry_del = tk.Entry(root, width=30)
+entry_del = tk.Entry(root, width=50)
 
 button_SEARCH = tk.Button(root, text="SEARCH", command=save_entry_value)
 

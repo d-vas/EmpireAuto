@@ -96,7 +96,6 @@ def get_terminal(activity):
         load['terminal'] = ''
 
 
-
 def msg_from_dict(dict_):
     msg = ''
     for i in dict_:
