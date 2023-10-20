@@ -1,7 +1,27 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
-from bot_v20 import cars
+
+
+scope = ['https://www.googleapis.com/auth/spreadsheets',
+             'https://www.googleapis.com/auth/drive']
+credentials = ServiceAccountCredentials.from_json_keyfile_name('empireauto1-bf404e4d35b2.json', scope)
+client = gspread.authorize(credentials)
+sheet = client.open("EmpireAuto/firstsheet").worksheet('Sheet4')
+
+
+
+def headers_list_new_row(dict_):
+    new_row = []
+    headers = sheet.row_values(1)
+
+    # for column in headers:
+        # new_row = new_row.append(dict_[column])
+    # print(new_row)
+    # sheet.append_row(new_row)
+
+def add_row(row_list, sheet):
+    sheet.append_row(row_list)
 
 
 def append_new_row_to_empire_ss(row):
