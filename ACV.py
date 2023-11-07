@@ -24,7 +24,7 @@ def acv_login_getting_table(login, password):
     tables = browser.find_elements(By.CSS_SELECTOR, "table") #res list of selenium elements
     table = tables[2] #res - sel elem
     table_html = table.get_attribute('outerHTML') #res - html-str
-    return table_html
+    return print(table_html)
 
 
 def acv_getting_table(table_html, pu_zip_range, del_zip_range):
