@@ -1,6 +1,5 @@
 
 
-
 def get_drivers(text, load, activity, loc_text):
 
     ''' current_driver '''

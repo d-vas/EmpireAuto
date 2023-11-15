@@ -5,6 +5,8 @@ ACV = {'login': "empire120@gmail.com",
 
 ONE_DISP = {'login': "EMPIRE1", 'password': "TRANz@1212"}
 
+SUPER_DISPATCH = {'login': "dzyadekvl@gmail.com", 'password': "DzyadekVasyl551980_Empire_2023"}
+
 '''AREA_ZIP_LIST
 syracuse
 rochester
