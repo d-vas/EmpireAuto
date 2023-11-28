@@ -1,119 +1,20 @@
-#!/usr/bin/env python
-# pylint: disable=unused-argument
-# This program is dedicated to the public domain under the CC0 license.
-
-"""This example showcases how PTBs "arbitrary callback data" feature can be used.
-
-For detailed info on arbitrary callback data, see the wiki page at
-https://github.com/python-telegram-bot/python-telegram-bot/wiki/Arbitrary-callback_data
-
-Note:
-To use arbitrary callback data, you must install PTB via
-`pip install "python-telegram-bot[callback-data]"`
-"""
-import logging
-from typing import List, Tuple, cast
-
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.ext import (
-    Application,
-    CallbackQueryHandler,
-    CommandHandler,
-    ContextTypes,
-    InvalidCallbackData,
-    PicklePersistence,
-)
-
-# Enable logging
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
-# set higher logging level for httpx to avoid all GET and POST requests being logged
-logging.getLogger("httpx").setLevel(logging.WARNING)
-
-logger = logging.getLogger(__name__)
+BUFF_ZIPS = [14001, 14004, 14005, 14006, 14008, 14009, 14011, 14012, 14013, 14020, 14024, 14025, 14026, 14028, 14030, 14031, 14032, 14033, 14036, 14037, 14039, 14040, 14043, 14047, 14051, 14052, 14055, 14057, 14059, 14061, 14066, 14067, 14068, 14069, 14072, 14075, 14080, 14081, 14082, 14085, 14086, 14092, 14094, 14095, 14098, 14102, 14103, 14105, 14107, 14108, 14109, 14111, 14112, 14113, 14120, 14125, 14126, 14127, 14131, 14132, 14139, 14141, 14144, 14145, 14150, 14167, 14169, 14170, 14172, 14174, 14201, 14202, 14203, 14204, 14205, 14206, 14207, 14208, 14209, 14210, 14211, 14212, 14213, 14214, 14215, 14216, 14217, 14218, 14219, 14220, 14221, 14222, 14223, 14224, 14225, 14226, 14227, 14228, 14231, 14233, 14240, 14241, 14260, 14261, 14263, 14264, 14265, 14267, 14269, 14270, 14272, 14273, 14276, 14280, 14301, 14302, 14303, 14304, 14305, 14569]
+ROCH_ZIPS = [14580, 14450, 14609, 14624, 14612, 14534, 14621, 14626, 14606, 14618, 14623, 14616, 14620, 14617, 14468, 14526, 14420, 14615, 14559, 14607, 14611, 14613, 14619, 14610, 14622, 14608, 14586, 14605, 14467, 14625, 14428, 14472, 14664, 14445, 14464, 14546, 14673, 14514, 14543, 14604, 14627, 14614, 14683, 14506, 14511, 14645, 14410, 14430, 14508, 14515, 14602, 14603, 14638, 14639, 14642, 14643, 14644, 14646, 14647, 14649, 14650, 14651, 14652, 14653, 14692, 14694, 14454, 14437, 14472, 14414, 14510, 14487, 14572, 14423, 14485, 14435, 14517, 14533, 14560, 14466, 14481, 14846, 14836, 14822, 14462, 14480, 14486, 14556, 14545, 14592, 14488, 14539, 14558, 14424, 14456, 14564, 14425, 14522, 14469, 14432, 14487, 14548, 14512, 14532, 14485, 14561, 14471, 14560, 14544, 14466, 14504, 14475, 14537, 14585, 14443, 14453, 14461, 14463, 14518, 14547, 14411, 14103, 14470, 14105, 14098, 14476, 14058, 14477, 14571, 14479, 14429, 14452, 14850, 14456, 13165, 13148, 14886, 14532, 14521, 13146, 14847, 14541, 14860, 14841, 13065, 14588, 14513, 14519, 14502, 14522, 14489, 14589, 14568, 14551, 14505, 14433, 14590, 13143, 13146, 14516, 14555, 13154, 14520, 14538, 14542, 14413, 14449, 14563]
+SYR_ZIP = [13202, 13225, 13250, 13251, 13252, 13261, 13201, 13221, 13220, 13244, 13217, 13218, 13235, 13203, 13210, 13204, 13208, 13290, 13207, 13205, 13224, 13206, 13219, 13214, 13211, 13088, 13212, 13089, 13209, 13215, 13057, 13120, 13078, 13031, 13116, 13066, 13090, 13039, 13164, 13108, 13084, 13041, 13104, 13082, 13138, 13110, 13030, 13029, 13060, 13027, 13112, 13152, 13037, 13119, 13063, 13132, 13153, 13020, 13080, 13159, 13051, 13137, 13044, 13135, 13035, 13141, 13167, 13036, 13032, 13103, 13166, 13043, 13028, 13042, 13113, 13122, 13076, 13022, 13024, 13077, 13163, 13069, 13021, 13158, 13162, 13118, 13033, 13061, 13087, 13123, 13157, 13134, 13140, 13408, 13131, 13056, 13054, 13421, 13052, 13401, 13147, 13074, 13072, 13461, 13117, 13111, 13034, 13484, 13308, 13107, 13409, 13334, 13114, 13115, 13160, 13478, 13092, 13045, 13483, 13493, 13310, 13101, 13316, 13126, 13146, 13143, 13121, 13124, 13477, 13154, 13139, 13071, 13362, 13476, 13302, 13738, 13148, 13465, 13155, 13026, 13156, 13064, 13093, 13073, 13136, 13346, 13425]
+WAT_ZIP = [13325, 13327, 13367, 13404, 13426, 13437, 13473, 13083, 13601, 13602, 13603, 13605, 13606, 13607, 13608, 13611, 13612, 13614, 13615, 13616, 13617, 13618, 13619, 13620, 13622, 13623, 13624, 13626, 13627, 13628, 13630, 13631, 13632, 13633, 13634, 13635, 13636, 13637, 13638, 13639, 13640, 13641, 13642, 13643, 13645, 13646, 13648, 13650, 13651, 13652, 13142, 13654, 13656, 13657, 13145, 13659, 13144, 13661, 13664, 13665, 13666, 13669, 13670, 13671, 13673, 13674, 13675, 13677, 13679, 13680, 13681, 13682, 13684, 13685, 13690, 13691, 13692, 13693, 13695, 13302, 13305]
+ALB_ZIP = [12288, 12801, 12803, 12804, 12809, 12301, 12302, 12303, 12304, 12305, 12306, 12307, 12308, 12309, 12816, 12822, 12823, 12828, 12831, 12833, 12834, 12835, 12325, 12839, 12846, 12848, 12850, 12345, 12859, 12863, 12865, 12866, 12871, 12873, 12884, 12405, 12413, 641, 12418, 642, 643, 12422, 12423, 12431, 660, 671, 12451, 12460, 684, 2735, 2736, 2737, 2738, 12469, 12470, 695, 12473, 12482, 12007, 12008, 12009, 12010, 12015, 12016, 12017, 12018, 12019, 12020, 12565, 12022, 12023, 12024, 12025, 12027, 12028, 12029, 12031, 12544, 12033, 12035, 12037, 12040, 12041, 12042, 12045, 12046, 12047, 12050, 12051, 12052, 12053, 12054, 12055, 12056, 12057, 12058, 12059, 12060, 12061, 12062, 12063, 12065, 12066, 12067, 12068, 12069, 12070, 12071, 12072, 12073, 12074, 12075, 12077, 12082, 12083, 12084, 12085, 12086, 12087, 12089, 12090, 12092, 12094, 12106, 12107, 12110, 12115, 12118, 12120, 12121, 12122, 12123, 12124, 12125, 12128, 12130, 12132, 12133, 12136, 12137, 12138, 12140, 12141, 12143, 12144, 12147, 12148, 12150, 12151, 12153, 12154, 12156, 12157, 12158, 12159, 12160, 12161, 12165, 12166, 12168, 12169, 12170, 12172, 12173, 12174, 12176, 12177, 12180, 12181, 12182, 12183, 12184, 12185, 12186, 12187, 12188, 12189, 12192, 12193, 12195, 12196, 12198, 12201, 12202, 12203, 12204, 12205, 12206, 12207, 12208, 12209, 12210, 12211, 12212, 12214, 12220, 12222, 12223, 12224, 12225, 12226, 12227, 12228, 12229, 12230, 12231, 12232, 12233, 12234, 12235, 12236, 12237, 12238, 12239, 12240, 12241, 12242, 12243, 12244, 12245, 12246, 12247, 12248, 12249, 12250, 12255, 12257, 12260, 12261]
+UTI_ZIP = [13495, 13417, 13599, 13505, 13504, 13503, 13492, 13501, 13413, 13479, 13403, 13321, 13424, 13319, 13323, 13502, 13456, 13341, 13490, 13469, 13441, 13340, 13354, 13322, 13304, 13328, 13449, 13442, 13476, 13440, 13431, 13318, 13357, 13477, 13455, 13480, 13425, 13362, 13435, 13478, 13313, 13350, 13352, 13461, 13486, 13416, 13438, 13491, 13406, 13421, 13465, 13409, 13402, 13363, 13418, 13054, 13407, 13308, 13303, 13364, 13365, 13310, 13314, 13163, 13301, 13355, 13134, 13439, 13408, 13162, 13485, 13157, 13346, 13043, 13401, 13032, 13361]
+BING_ZIP = [13901, 13905, 13745, 13902, 13737, 13790, 13762, 13744, 13903, 13904, 13761, 13763, 13851, 13760, 13777, 13850, 13802, 13833, 13795, 13748, 13746, 13848, 13749, 13862, 13787, 13797, 18812, 13811, 18822, 13732, 13826, 13865, 18821, 13778, 18830, 18818, 13736, 13794, 13841, 13827]
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Sends a message with 5 inline buttons attached."""
-    number_list: List[int] = []
-    await update.message.reply_text("Please choose:", reply_markup=build_keyboard(number_list))
+ZIPS = {'bf': BUFF_ZIPS,
+        'rch': ROCH_ZIPS,
+        'syr': SYR_ZIP,
+        'wat': WAT_ZIP,
+        'alb': ALB_ZIP,
+        'ut': UTI_ZIP,
+        'bng': BING_ZIP}
 
+for i in ZIPS:
+    print(i, ' - ', ZIPS[i])
 
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Displays info on how to use the bot."""
-    await update.message.reply_text(
-        "Use /start to test this bot. Use /clear to clear the stored data so that you can see "
-        "what happens, if the button data is not available. "
-    )
-
-
-async def clear(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Clears the callback data cache"""
-    context.bot.callback_data_cache.clear_callback_data()
-    context.bot.callback_data_cache.clear_callback_queries()
-    await update.effective_message.reply_text("All clear!")
-
-
-def build_keyboard(current_list: List[int]) -> InlineKeyboardMarkup:
-    """Helper function to build the next inline keyboard."""
-    return InlineKeyboardMarkup.from_column(
-        [InlineKeyboardButton(str(i), callback_data=(i, current_list)) for i in range(1, 6)]
-    )
-
-
-async def list_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Parses the CallbackQuery and updates the message text."""
-    query = update.callback_query
-    await query.answer()
-    # Get the data from the callback_data.
-    # If you're using a type checker like MyPy, you'll have to use typing.cast
-    # to make the checker get the expected type of the callback_data
-    number, number_list = cast(Tuple[int, List[int]], query.data)
-    # append the number to the list
-    number_list.append(number)
-
-    await query.edit_message_text(
-        text=f"So far you've selected {number_list}. Choose the next item:",
-        reply_markup=build_keyboard(number_list),
-    )
-
-    # we can delete the data stored for the query, because we've replaced the buttons
-    context.drop_callback_data(query)
-
-
-async def handle_invalid_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Informs the user that the button is no longer available."""
-    await update.callback_query.answer()
-    await update.effective_message.edit_text(
-        "Sorry, I could not process this button click 😕 Please send /start to get a new keyboard."
-    )
-
-
-def main() -> None:
-    """Run the bot."""
-    # We use persistence to demonstrate how buttons can still work after the bot was restarted
-    persistence = PicklePersistence(filepath="arbitrarycallbackdatabot")
-    # Create the Application and pass it your bot's token.
-    application = (
-        Application.builder()
-        .token("TOKEN")
-        .persistence(persistence)
-        .arbitrary_callback_data(True)
-        .build()
-    )
-
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("help", help_command))
-    application.add_handler(CommandHandler("clear", clear))
-    application.add_handler(
-        CallbackQueryHandler(handle_invalid_button, pattern=InvalidCallbackData)
-    )
-    application.add_handler(CallbackQueryHandler(list_button))
-
-    # Run the bot until the user presses Ctrl-C
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
-
-
-if __name__ == "__main__":
-    main()

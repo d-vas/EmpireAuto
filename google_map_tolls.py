@@ -11,9 +11,13 @@ def g_dist(start, end):
         # elements = soup.findall('div', class_="m6QErb")
         # elements = soup.findall('div', class_="m6QErb")
         # print(soup)
-        # print(r.text)
+        print(r.text)
+        # print(r)
         # print(elements)
         dist = re.findall(r'I-90.{,50}miles', r.text)[0]
+        print()
+        print(dist)
+
         dist = float(dist.split(r'"')[-1].split()[0])
         print(dist)
         # objects = re.findall(r'I-90.{,50}miles', r.text)
@@ -27,5 +31,5 @@ office = '43.10963196952701,-76.26771247271869'
 yard = '43.123666305403006,-76.07407845128988'
 
 # g_dist(office, yard)
-g_dist((42.754102670228285, -73.93355290488417), (43.02889705751563, -77.96467160095592))
+g_dist((43.047726105167186,-77.65181180301741), (42.99537696473385,-77.36399585534787))
 

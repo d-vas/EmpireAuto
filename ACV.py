@@ -2,7 +2,19 @@ import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
-import settings
+from settings import ZIPS
+
+
+def determine_region(pu_zip, del_zip, zips):
+    for i in zips:
+        if pu_zip in zips[i]:
+            pu_range = zips[i]
+    for i in zips:
+        if del_zip in zips[i]:
+            del_range = zips[i]
+    # print(pu_range)
+    # print(del_range)
+    return pu_range, del_range
 
 
 def acv_login_getting_table(login, password):
@@ -24,10 +36,10 @@ def acv_login_getting_table(login, password):
     tables = browser.find_elements(By.CSS_SELECTOR, "table") #res list of selenium elements
     table = tables[2] #res - sel elem
     table_html = table.get_attribute('outerHTML') #res - html-str
-    return print(table_html)
+    # print(table_html)
 
 
-def acv_getting_table(table_html, pu_zip_range, del_zip_range):
+def acv_getting_list(table_html, pu_zip_range, del_zip_range, pu_zip, del_zip):
     df = pd.read_html(table_html)[0]
     df = df.fillna('NONE')
     df = df.iloc[5:-1]
@@ -45,12 +57,13 @@ def acv_getting_table(table_html, pu_zip_range, del_zip_range):
     filtered_df['DEL_Zip'] = filtered_df['DEL_Zip'].astype(int)
 
     # filter table by zip
-    filtered_df = filtered_df[filtered_df['DEL_Zip'] >= 12000]
-    filtered_df = filtered_df[12599 >= filtered_df['DEL_Zip']]
+    filtered_df = filtered_df[filtered_df['PU_Zip'] in pu_zip_range]
+    filtered_df = filtered_df[filtered_df['DEL_Zip'] in del_zip_range]
 
-    print(filtered_df)
+    # print(filtered_df)
 
 
-table_html = acv_login_getting_table(settings.ACV['login'], settings.ACV['pass'])
-acv_getting_table(table_html, pu_zip_range, del_zip_range)
+determine_region(13206, 14001, ZIPS)
+# table_html = acv_login_getting_table(settings.ACV['login'], settings.ACV['pass'])
+# acv_getting_list(table_html, pu_zip, del_zip)
 

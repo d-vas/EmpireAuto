@@ -3,9 +3,6 @@ from telegram import Update
 from telegram import ReplyKeyboardMarkup
 import settings
 import tk_window
-import re
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 
 
 # BUTTONS
