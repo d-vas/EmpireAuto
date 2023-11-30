@@ -2,6 +2,14 @@ import requests
 import re
 
 
+def make_link_from_locations(text):
+    url = f"https://www.google.com/maps?saddr={start}&daddr={end}"
+    text.split()
+"""
+https://www.google.com/maps/dir/Morganville,+Marlboro,+NJ/Windsor,+NJ+08561/Mahwah,+New+Jersey
+"""
+
+
 def g_dist(start, end):
     url = f"https://www.google.com/maps?saddr={start}&daddr={end}"
     print(url)

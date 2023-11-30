@@ -6,17 +6,11 @@ from settings import ZIPS
 import settings
 
 
-'''def determine_region(pu_zip, del_zip, zips):
-    for i in zips:
-        if pu_zip in zips[i]:
-            pu_range = zips[i]
-            print(i, ' - ', pu_range)
-    for i in zips:
-        if del_zip in zips[i]:
-            del_range = zips[i]
-            print(i, ' - ', del_range)
-    return pu_range, del_range
-'''
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', 5)
+pd.set_option('display.width', 1000)
+# pd.set_option('display.multi_sparse', False)
+
 
 def acv_login_getting_table(login, password):
     url = 'https://transport-v1.acvauctions.com/jobs/available.php'
@@ -49,7 +43,7 @@ def acv_getting_list(table_html, pu_zip, del_zip, zips):
     df = df.iloc[1:]
     df = df.drop(columns=['NONE', 'DT', 'Date', 'Inop?', 'Address', 'Distance'])
     df.columns = ['Order ID', 'Vehicle', 'PU_City', 'PU_State', 'PU_Zip', 'DEL_City', 'DEL_State', 'DEL_Zip', 'Payout']
-
+    # df.set_index('Order ID', inplace=True)
     df['PU_Zip'] = df['PU_Zip'].astype(int)
     df['DEL_Zip'] = df['DEL_Zip'].astype(int)
 
@@ -65,14 +59,48 @@ def acv_getting_list(table_html, pu_zip, del_zip, zips):
             del_range = zips[i]
             # print(i, ' - ', del_range)
 
-    df = df[df['PU_Zip'] in pu_range]
-    df = df[df['DEL_Zip'] in del_range]
+    # print(df)
+    # print()
+    # print(pu_range, del_range, sep='\n')
+
+    # print(min(pu_range), max(pu_range))
+    # print(type(min(pu_range)), type(max(pu_range)))
+
+    # filtered_df = df[min(pu_range) > df['PU_Zip'] < max(pu_range)]
+    filtered_df = df[df['PU_Zip'] > min(pu_range)]
+    filtered_df = df[df['PU_Zip'] < max(pu_range)]
+    filtered_df = df[df['DEL_Zip'] > min(del_range)]
+    filtered_df = df[df['DEL_Zip'] < max(del_range)]
+    # print(filtered_df)
+    # print()
+    # print(filtered_df.to_dict())
+
+    # filtered_df = filtered_df.iloc[0:]
+    # print(filtered_df)
+
+    # df = df[df['DEL_Zip'] in del_range]
     # filtered_df = filtered_df[filtered_df['DEL_Zip'] in del_zip_range]
 
-    print(df)
+    # print(df)
 
-# determine_region(13902, 13606, ZIPS)
+    # df_dict = filtered_df['Order ID'].to_dict()
+    #
+    # for i in df_dict:
+    #     print(i, ' - ', df_dict[i])
+
+    marged_df = filtered_df
+
+    marged_df['pu_address'] = filtered_df['PU_City'] + ', ' + filtered_df['PU_State'] + ' ' + filtered_df['PU_Zip'].astype(str)
+    marged_df['del_address'] = filtered_df['DEL_City'] + ', ' + filtered_df['DEL_State'] + ' ' + filtered_df['DEL_Zip'].astype(str)
+    columns_to_drop = ['PU_City', 'PU_State', 'PU_Zip', 'DEL_City', 'DEL_State', 'DEL_Zip']
+    marged_df.drop(columns=columns_to_drop, inplace=True)
+    marged_df['Price'] = marged_df.pop('Payout')
+    # marged_df.drop(columns=['PU_City', 'PU_State', 'PU_Zip', 'DEL_City', 'DEL_State', 'DEL_Zip'])
+
+    print(marged_df)
+    # print('count = ', len(marged_df))
+
+
 table_html = acv_login_getting_table(settings.ACV['login'], settings.ACV['pass'])
-
-acv_getting_list(table_html, pu_zip, del_zip)
+acv_getting_list(table_html, 13202, 14001, ZIPS)
 
