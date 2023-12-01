@@ -68,9 +68,10 @@ def acv_getting_list(table_html, pu_zip, del_zip, zips):
 
     # filtered_df = df[min(pu_range) > df['PU_Zip'] < max(pu_range)]
     filtered_df = df[df['PU_Zip'] > min(pu_range)]
-    filtered_df = df[df['PU_Zip'] < max(pu_range)]
-    filtered_df = df[df['DEL_Zip'] > min(del_range)]
-    filtered_df = df[df['DEL_Zip'] < max(del_range)]
+    filtered_df = filtered_df[df['PU_Zip'] < max(pu_range)]
+    filtered_df = filtered_df[df['DEL_Zip'] > min(del_range)]
+    filtered_df = filtered_df[df['DEL_Zip'] < max(del_range)]
+
     # print(filtered_df)
     # print()
     # print(filtered_df.to_dict())
@@ -97,10 +98,27 @@ def acv_getting_list(table_html, pu_zip, del_zip, zips):
     marged_df['Price'] = marged_df.pop('Payout')
     # marged_df.drop(columns=['PU_City', 'PU_State', 'PU_Zip', 'DEL_City', 'DEL_State', 'DEL_Zip'])
 
-    print(marged_df)
+    # print(marged_df)
     # print('count = ', len(marged_df))
+    #
+    # # df_dict = marged_df.set_index('Order ID').to_dict(orient='index')
+    # df_dict = marged_df.set_index('Order ID').to_dict()
+    # print(df_dict)
 
+    result_dict = {}
+
+    for index, row in marged_df.iterrows():
+        key = row['Order ID']
+        values = row.drop('Order ID').tolist()
+        result_dict[key] = values
+
+    print(result_dict)
+    print()
+
+    for i in result_dict:
+        print(i, ' - ', result_dict[i])
+    print('count =', len(result_dict))
 
 table_html = acv_login_getting_table(settings.ACV['login'], settings.ACV['pass'])
-acv_getting_list(table_html, 13202, 14001, ZIPS)
+acv_getting_list(table_html, 13202, 12205, ZIPS)
 
