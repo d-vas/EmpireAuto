@@ -1,8 +1,8 @@
 import tkinter as tk
 
 
-req_pu = {'city': '', 'state': '', 'zip': ''}
-req_del = {'city': '', 'state': '', 'zip': ''}
+# req_pu = {'city': '', 'state': '', 'zip': ''}
+# req_del = {'city': '', 'state': '', 'zip': ''}
 
 
 def get_location(loc_text, req_dict):

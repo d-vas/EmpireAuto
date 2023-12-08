@@ -2,7 +2,7 @@ from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandl
 from telegram import Update
 from telegram import ReplyKeyboardMarkup
 import settings
-import tk_window
+# import tk_window
 
 
 # BUTTONS
@@ -55,7 +55,7 @@ def main():
     # headers_list_new_row(load)
     application = Application.builder().token(TOKEN).build()
     application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler(btn_fnd_new_ld, tk_window))
+    # application.add_handler(CommandHandler(btn_fnd_new_ld, tk_window))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
     application.run_polling()
 

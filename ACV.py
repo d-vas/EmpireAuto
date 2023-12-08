@@ -44,8 +44,8 @@ def acv_getting_list(table_html, pu_zip, del_zip, zips):
     df = df.drop(columns=['NONE', 'DT', 'Date', 'Inop?', 'Address', 'Distance'])
     df.columns = ['Order ID', 'Vehicle', 'PU_City', 'PU_State', 'PU_Zip', 'DEL_City', 'DEL_State', 'DEL_Zip', 'Payout']
     # df.set_index('Order ID', inplace=True)
-    df['PU_Zip'] = df['PU_Zip'].astype(int)
-    df['DEL_Zip'] = df['DEL_Zip'].astype(int)
+    # df['PU_Zip'] = df['PU_Zip'].astype(int)
+    # df['DEL_Zip'] = df['DEL_Zip'].astype(int)
 
     pu_range = []
     del_range = []
@@ -53,7 +53,7 @@ def acv_getting_list(table_html, pu_zip, del_zip, zips):
     for i in zips:
         if pu_zip in zips[i]:
             pu_range = zips[i]
-            # print(i, ' - ', pu_range)
+            # print(pu_range)
     for i in zips:
         if del_zip in zips[i]:
             del_range = zips[i]
@@ -66,13 +66,15 @@ def acv_getting_list(table_html, pu_zip, del_zip, zips):
     # print(min(pu_range), max(pu_range))
     # print(type(min(pu_range)), type(max(pu_range)))
 
-    # filtered_df = df[min(pu_range) > df['PU_Zip'] < max(pu_range)]
+    filtered_df = df[df['PU_Zip'] in pu_range]
+    '''
     filtered_df = df[df['PU_Zip'] > min(pu_range)]
     filtered_df = filtered_df[df['PU_Zip'] < max(pu_range)]
     filtered_df = filtered_df[df['DEL_Zip'] > min(del_range)]
     filtered_df = filtered_df[df['DEL_Zip'] < max(del_range)]
+    '''
 
-    # print(filtered_df)
+    print(filtered_df)
     # print()
     # print(filtered_df.to_dict())
 
@@ -89,6 +91,7 @@ def acv_getting_list(table_html, pu_zip, del_zip, zips):
     # for i in df_dict:
     #     print(i, ' - ', df_dict[i])
 
+'''
     marged_df = filtered_df
 
     marged_df['pu_address'] = filtered_df['PU_City'] + ', ' + filtered_df['PU_State'] + ' ' + filtered_df['PU_Zip'].astype(str)
@@ -96,6 +99,7 @@ def acv_getting_list(table_html, pu_zip, del_zip, zips):
     columns_to_drop = ['PU_City', 'PU_State', 'PU_Zip', 'DEL_City', 'DEL_State', 'DEL_Zip']
     marged_df.drop(columns=columns_to_drop, inplace=True)
     marged_df['Price'] = marged_df.pop('Payout')
+
     # marged_df.drop(columns=['PU_City', 'PU_State', 'PU_Zip', 'DEL_City', 'DEL_State', 'DEL_Zip'])
 
     # print(marged_df)
@@ -118,6 +122,7 @@ def acv_getting_list(table_html, pu_zip, del_zip, zips):
     for i in result_dict:
         print(i, ' - ', result_dict[i])
     print('count =', len(result_dict))
+'''
 
 table_html = acv_login_getting_table(settings.ACV['login'], settings.ACV['pass'])
 acv_getting_list(table_html, 13202, 12205, ZIPS)
