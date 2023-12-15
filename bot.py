@@ -17,14 +17,17 @@ btn_snd_msg_all_drv = 'SEND MESSAGE TO ALL DRIVERS'
 btn_snd_msg_3cd = 'SEND MESSAGE TO 3-CAR DRIVERS'
 btn_snd_msg_9cd = 'SEND MESSAGE TO 9-CAR DRIVERS'
 btn_snd_msg_acc = 'SEND MESSAGE TO ACCOUNTING'
+btn_make_link = 'MAKE A LIST FROM LOCATIONS'
 
 
+'''
 main_menu_btn_list = [btn_fnd_ld, btn_snd_msg]
 find_menu_btn_list = [btn_fnd_new_ld, btn_fnd_crt_ld]
 msg_menu_btn_list = [[btn_snd_msg_ofc, ], [btn_snd_msg_yrd, ], [btn_snd_msg_all, ], [btn_snd_msg_all_drv, ], [btn_snd_msg_3cd, ], [btn_snd_msg_9cd, ], [btn_snd_msg_acc, ]]
-main_menu = [main_menu_btn_list]
-main_menu.insert(0, find_menu_btn_list)
-main_menu.insert(0, msg_menu_btn_list)
+'''
+
+main_menu = [[btn_make_link], ]
+
 
 TOKEN = settings.TOKEN
 
@@ -45,10 +48,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     text = update.message.text
-    # new_message = ''
-    # if text == btn_fnd_new_ld:
+    reply_markup = ReplyKeyboardMarkup(main_menu, resize_keyboard=True)
 
-    await update.message.reply_text('hi')
+    await update.message.reply_text('hi message_handler', reply_markup=reply_markup)
 
 
 def main():

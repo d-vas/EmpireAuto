@@ -4,7 +4,7 @@ import re
 
 def make_link_from_locations(text):
     url = f"https://www.google.com/maps?saddr={start}&daddr={end}"
-    text.split()
+    text.replace()
 """
 https://www.google.com/maps/dir/Morganville,+Marlboro,+NJ/Windsor,+NJ+08561/Mahwah,+New+Jersey
 """
