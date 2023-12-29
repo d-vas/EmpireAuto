@@ -3,11 +3,10 @@ import re
 
 
 def make_link_from_locations(text):
-    url = f"https://www.google.com/maps?saddr={start}&daddr={end}"
-    text.replace()
-"""
-https://www.google.com/maps/dir/Morganville,+Marlboro,+NJ/Windsor,+NJ+08561/Mahwah,+New+Jersey
-"""
+    base_url = 'https://www.google.com/maps/dir/'
+    text = text.replace(' ', '+')
+    text = text.replace('\n', '/')
+    return print(base_url + text)
 
 
 def g_dist(start, end):
@@ -35,9 +34,8 @@ def g_dist(start, end):
         print(f"Помилка при отриманні сторінки. Статус код: {r.status_code}")
 
 
-office = '43.10963196952701,-76.26771247271869'
-yard = '43.123666305403006,-76.07407845128988'
-
 # g_dist(office, yard)
-g_dist((43.047726105167186,-77.65181180301741), (42.99537696473385,-77.36399585534787))
+# g_dist((43.047726105167186,-77.65181180301741), (42.99537696473385,-77.36399585534787))
+
+# make_link_from_locations('Tabernacle Twp, NJ\nNewburgh, NY\nManchester, PA')
 

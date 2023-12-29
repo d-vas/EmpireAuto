@@ -2,6 +2,7 @@ from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandl
 from telegram import Update
 from telegram import ReplyKeyboardMarkup
 import settings
+from google_map_tolls import make_link_from_locations
 # import tk_window
 
 
@@ -50,13 +51,19 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     text = update.message.text
     reply_markup = ReplyKeyboardMarkup(main_menu, resize_keyboard=True)
 
-    await update.message.reply_text('hi message_handler', reply_markup=reply_markup)
+    if text == btn_make_link:
+        await update.message.reply_text('ВВЕДІТЬ СПИСОК ЛОКАЦІЙ', reply_markup=reply_markup, )
+        print(update.message.text)
+
+        make_link_from_locations(text)
+    # await update.message.reply_text('hi message_handler', reply_markup=reply_markup)
 
 
 def main():
     # headers_list_new_row(load)
     application = Application.builder().token(TOKEN).build()
     application.add_handler(CommandHandler("start", start))
+
     # application.add_handler(CommandHandler(btn_fnd_new_ld, tk_window))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
     application.run_polling()
