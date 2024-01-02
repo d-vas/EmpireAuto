@@ -1,12 +1,14 @@
 import requests
 import re
+from telegram import Update
 
 
 def make_link_from_locations(text):
+    # print(text)
     base_url = 'https://www.google.com/maps/dir/'
     text = text.replace(' ', '+')
     text = text.replace('\n', '/')
-    return print(base_url + text)
+    return base_url + text
 
 
 def g_dist(start, end):

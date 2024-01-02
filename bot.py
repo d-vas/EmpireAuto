@@ -53,9 +53,10 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
     if text == btn_make_link:
         await update.message.reply_text('ВВЕДІТЬ СПИСОК ЛОКАЦІЙ', reply_markup=reply_markup, )
-        print(update.message.text)
+        new_text = update.message.text
+        # print(new_text)
+        # await update.message.reply_text(make_link_from_locations(update.message.text), reply_markup=reply_markup, )
 
-        make_link_from_locations(text)
     # await update.message.reply_text('hi message_handler', reply_markup=reply_markup)
 
 
