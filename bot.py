@@ -2,6 +2,7 @@ from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandl
 from telegram import Update
 from telegram import ReplyKeyboardMarkup
 import settings
+import google_map_tolls
 # import tk_window
 
 
@@ -17,6 +18,7 @@ btn_snd_msg_all_drv = 'SEND MESSAGE TO ALL DRIVERS'
 btn_snd_msg_3cd = 'SEND MESSAGE TO 3-CAR DRIVERS'
 btn_snd_msg_9cd = 'SEND MESSAGE TO 9-CAR DRIVERS'
 btn_snd_msg_acc = 'SEND MESSAGE TO ACCOUNTING'
+btn_make_trip = 'MAKE A TRiP'
 
 
 main_menu_btn_list = [btn_fnd_ld, btn_snd_msg]
@@ -25,6 +27,7 @@ msg_menu_btn_list = [[btn_snd_msg_ofc, ], [btn_snd_msg_yrd, ], [btn_snd_msg_all,
 main_menu = [main_menu_btn_list]
 main_menu.insert(0, find_menu_btn_list)
 main_menu.insert(0, msg_menu_btn_list)
+main_menu.insert(0, [btn_make_trip])
 
 TOKEN = settings.TOKEN
 
@@ -47,7 +50,9 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     text = update.message.text
     # new_message = ''
     # if text == btn_fnd_new_ld:
-
+    if text == btn_make_trip:
+        google_map_tolls.make_link_from_locations(text)
+    reply_markup = ReplyKeyboardMarkup(main_menu, resize_keyboard=True)
     await update.message.reply_text('hi')
 
 
