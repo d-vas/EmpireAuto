@@ -4,6 +4,8 @@ from selenium.webdriver.common.by import By
 import settings
 from io import StringIO
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 URL = 'https://www.1dispatch.com/Carrier/CarrierViewHistory?DataType=ReLoad'
@@ -25,7 +27,10 @@ def one_disp_login(login, password, url, browser):
 def getting_all_table(login, password, url, browser):
     one_disp_login(login, password, URL, browser)
 
-    browser.find_elements(By.ID, "CarrierViewHistory_Menu")[1].click()
+    # list_of_elements = browser.find_elements(By.ID, "CarrierViewHistory_Menu")
+    list_of_elements = browser.find_elements(By.XPATH, r'//*[@id="CarrierViewHistory_Menu"]')[0]
+    # list_of_elements = browser.find_elements(By.CLASS_NAME, "ui-multiselect ui-widget ui-state-default ui-corner-all carrier-my-load-filter")
+    print(list_of_elements)
 
     # browser.find_element(By.CLASS_NAME, "ui-icon ui-icon-triangle-2-n-s").click()
 
@@ -44,9 +49,12 @@ def getting_all_table(login, password, url, browser):
     # if not checkbox_pdel.is_selected():
     #     checkbox_pdel.click()
 
-    select_element = Select(browser.find_element(By.ID, "perpage"))
-    select_element.select_by_visible_text("All")
+    element = WebDriverWait(browser, 10).until(
+        EC.visibility_of_element_located((By.ID, "your_element_id"))
+    )
 
+    select_element = Select(browser.find_element(By.ID, "per_page_count"))
+    select_element.select_by_visible_text("200")
 
     table = browser.find_element(By.ID, "ajaxPanel1")
     # print(table)
@@ -79,6 +87,6 @@ def one_disp_dashboard(login, password, url, browser):
     # print(df)
 
 
-getting_all_table(login, password, URL, browser)
+getting_all_table(login=login, password=password, url=URL, browser=browser)
 # one_disp_dashboard(login, password, URL_DASH, browser)
 
