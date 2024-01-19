@@ -1,6 +1,7 @@
 import requests
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import settings
 
 
 scope = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
@@ -10,17 +11,38 @@ file_of_sheets = client.open("EmpireAuto/firstsheet")
 
 
 base_url = 'https://carrier.superdispatch.com/internal/web/loads/new/?page='
+assign_url = 'https://carrier.superdispatch.com/internal/web/loads/assigned/?page='
+
 
 cookies = requests.get(base_url).cookies.get_dict()
-headers = {"authorization": "Token 907fb140aebd44d799399ee4d9d2a443",}
+headers = settings.SD_headers_work
 
 load_list = []
 florida_load_list = []
 dispatched_load_list = []
+assigned_load_list = []
+
+load_key_list = [number, pickup, delivery, customer, payments, driver, terminals, vehicles, online_bol_url, guid]
+
+def get_assign_loads_list(base_url, headers, cookies, counter, load_list):
+    url = assign_url + str(counter)
+    r = requests.get(url, headers=headers, cookies=cookies)
+    data_list = r.json()['data']
+    load_list.extend(data_list)
+    if len(data_list) == 10:
+        counter += 1
+        get_assign_loads_list(base_url=assign_url, headers=headers, cookies=cookies, counter=counter, load_list=assigned_load_list)
+    '''
+    for i in assigned_load_list:
+        print(i)
+    '''
+    for i in assigned_load_list[0]:
+        print(f'{i} - {assigned_load_list[0][i]}')
 
 
 def filling_sheet(sheet_name, f, load_list):
     sheet = f.worksheet(sheet_name)
+    assert isinstance(sheet, object)
     sheet.clear()
     sheet.append_row(list(load_list[0].keys()))
     for i in load_list:
@@ -31,7 +53,7 @@ def filling_sheet(sheet_name, f, load_list):
 
 
 def cleanse_vehicle(dct):
-    dct['car_name'] = str(dct['year']) + ' ' + dct['make'] + ' ' + dct['model']
+    dct['car_name'] = f"{dct['year']} {dct['make']} {dct['model']}"
     key_list_to_remove = ['guid', 'make', 'model', 'year', 'color', 'requires_enclosed_trailer', 'type', 'lot_number', 'is_inoperable', 'price',]
     for i in key_list_to_remove:
         del dct[i]
@@ -40,6 +62,7 @@ def cleanse_vehicle(dct):
 def get_new_loads_list(base_url, headers, cookies, counter, load_list):
     url = base_url + str(counter)
     r = requests.get(url, headers=headers, cookies=cookies)
+
     data_list = r.json()['data']
     load_list.extend(data_list)
     if len(data_list) == 10:
@@ -93,12 +116,12 @@ def cleance_load_dct(dct):
 
 
 get_new_loads_list(base_url=base_url, headers=headers, cookies=cookies, counter=1, load_list=load_list)
-# print(load_list[0].keys())
-print(load_list[0])
 
 get_dispatched_load_list(load_list=load_list, dispatched_list=dispatched_load_list)
 
 get_florida_load_list(load_list=load_list, florida_load_list=florida_load_list)
+
+get_assign_loads_list(base_url=assign_url, headers=headers, cookies=cookies, counter=1, load_list=assigned_load_list)
 
 for i in dispatched_load_list:
     if i in load_list:
@@ -120,8 +143,11 @@ for i in florida_load_list:
 filling_sheet(sheet_name='new_loads', f=file_of_sheets, load_list=load_list)
 filling_sheet(sheet_name='dispatched', f=file_of_sheets, load_list=dispatched_load_list)
 filling_sheet(sheet_name='florida', f=file_of_sheets, load_list=florida_load_list)
+# filling_sheet(sheet_name='assigned', f=file_of_sheets, load_list=assigned_load_list)
 
 
 print(len(load_list))
 print(len(dispatched_load_list))
 print(len(florida_load_list))
+print('_'*10, '\n', 'total new - ', len(florida_load_list) + len(dispatched_load_list) + len(load_list))
+print(f'assigned - {len(assigned_load_list)}')

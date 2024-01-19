@@ -7,6 +7,11 @@ ONE_DISP = {'login': "EMPIRE1", 'password': "TRANz@1212"}
 
 SUPER_DISPATCH = {'login': "dzyadekvl@gmail.com", 'password': "DzyadekVasyl551980_Empire_2023"}
 
+
+# headers = {"authorization": "Token 907fb140aebd44d799399ee4d9d2a443",}
+SD_headers_work = {"authorization": "Token b1b04d10dca641418328677191afb455", }
+
+
 '''AREA_ZIP_LIST
 philadelphia
 newark'''
