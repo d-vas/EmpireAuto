@@ -22,7 +22,7 @@ florida_load_list = []
 dispatched_load_list = []
 assigned_load_list = []
 
-load_key_list = [number, pickup, delivery, customer, payments, driver, terminals, vehicles, online_bol_url, guid]
+# load_key_list = [number, pickup, delivery, customer, payments, driver, terminals, vehicles, online_bol_url, guid]
 
 def get_assign_loads_list(base_url, headers, cookies, counter, load_list):
     url = assign_url + str(counter)
@@ -121,7 +121,7 @@ get_dispatched_load_list(load_list=load_list, dispatched_list=dispatched_load_li
 
 get_florida_load_list(load_list=load_list, florida_load_list=florida_load_list)
 
-get_assign_loads_list(base_url=assign_url, headers=headers, cookies=cookies, counter=1, load_list=assigned_load_list)
+# get_assign_loads_list(base_url=assign_url, headers=headers, cookies=cookies, counter=1, load_list=assigned_load_list)
 
 for i in dispatched_load_list:
     if i in load_list:
