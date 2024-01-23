@@ -22,22 +22,17 @@ florida_load_list = []
 dispatched_load_list = []
 assigned_load_list = []
 
-# load_key_list = [number, pickup, delivery, customer, payments, driver, terminals, vehicles, online_bol_url, guid]
+
+
 
 def get_assign_loads_list(base_url, headers, cookies, counter, load_list):
-    url = assign_url + str(counter)
+    url = base_url + str(counter)
     r = requests.get(url, headers=headers, cookies=cookies)
     data_list = r.json()['data']
     load_list.extend(data_list)
     if len(data_list) == 10:
         counter += 1
-        get_assign_loads_list(base_url=assign_url, headers=headers, cookies=cookies, counter=counter, load_list=assigned_load_list)
-    '''
-    for i in assigned_load_list:
-        print(i)
-    '''
-    for i in assigned_load_list[0]:
-        print(f'{i} - {assigned_load_list[0][i]}')
+        get_assign_loads_list(base_url=assign_url, headers=headers, cookies=cookies, counter=counter, load_list=load_list)
 
 
 def filling_sheet(sheet_name, f, load_list):
@@ -62,7 +57,8 @@ def cleanse_vehicle(dct):
 def get_new_loads_list(base_url, headers, cookies, counter, load_list):
     url = base_url + str(counter)
     r = requests.get(url, headers=headers, cookies=cookies)
-
+    # print(r)
+    # print(r.json()['data'])
     data_list = r.json()['data']
     load_list.extend(data_list)
     if len(data_list) == 10:
@@ -83,36 +79,32 @@ def get_florida_load_list(load_list, florida_load_list):
 
 
 def cleance_load_dct(dct):
-    key_list = ['number', 'pickup', 'delivery', 'customer', 'payments', 'vehicles', ]
+    key_list = ['number', 'pickup', 'delivery', 'customer', 'payments', 'vehicles', 'driver', 'terminals', 'online_bol_url', 'guid']
     key_list_remove = set(dct.keys()) - set(key_list)
     for i in key_list_remove:
         del dct[i]
 
     dct['pickup'] = dct['pickup']['venue']
     dct['pickup_loc'] = f"{dct['pickup']['address']},  {dct['pickup']['city']}, {dct['pickup']['state']} {dct['pickup']['zip']}"
-    del dct['pickup']['business_type']
-    del dct['pickup']['contacts']
+    del dct['pickup']
 
     dct['delivery'] = dct['delivery']['venue']
-    del dct['delivery']['business_type']
-    del dct['delivery']['contacts']
     dct['delivery_loc'] = f"{dct['delivery']['city']}, {dct['delivery']['state']} {dct['delivery']['zip']}"
-
-    dct['vins'] = ''
-
-    for i in dct['vehicles']:
-        cleanse_vehicle(i)
-        dct['vins'] += f"\n{i['vin']}"
+    del dct['delivery']
 
     dct['customer'] = dct['customer']['venue']['name']
     dct['total_price'] = dct['payments'][0]['price']
     del dct['payments']
 
+    dct['vins'] = ''
+    for i in dct['vehicles']:
+        cleanse_vehicle(i)
+        dct['vins'] += f"\n{i['vin']}"
     dct['vehicles_count'] = len(dct['vehicles'])
-
-    del dct['pickup']
-    del dct['delivery']
     del dct['vehicles']
+
+
+
 
 
 get_new_loads_list(base_url=base_url, headers=headers, cookies=cookies, counter=1, load_list=load_list)
@@ -122,6 +114,14 @@ get_dispatched_load_list(load_list=load_list, dispatched_list=dispatched_load_li
 get_florida_load_list(load_list=load_list, florida_load_list=florida_load_list)
 
 # get_assign_loads_list(base_url=assign_url, headers=headers, cookies=cookies, counter=1, load_list=assigned_load_list)
+
+# for i in assigned_load_list:
+#     print(i)
+# print(len(assigned_load_list))
+
+# for i in assigned_load_list[0]:
+#     print(f'{i} - {assigned_load_list[0][i]}')
+
 
 for i in dispatched_load_list:
     if i in load_list:
@@ -141,8 +141,8 @@ for i in florida_load_list:
     cleance_load_dct(i)
 
 filling_sheet(sheet_name='new_loads', f=file_of_sheets, load_list=load_list)
-filling_sheet(sheet_name='dispatched', f=file_of_sheets, load_list=dispatched_load_list)
-filling_sheet(sheet_name='florida', f=file_of_sheets, load_list=florida_load_list)
+# filling_sheet(sheet_name='dispatched', f=file_of_sheets, load_list=dispatched_load_list)
+# filling_sheet(sheet_name='florida', f=file_of_sheets, load_list=florida_load_list)
 # filling_sheet(sheet_name='assigned', f=file_of_sheets, load_list=assigned_load_list)
 
 
