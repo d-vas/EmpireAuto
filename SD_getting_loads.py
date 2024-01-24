@@ -15,8 +15,12 @@ assign_url = 'https://carrier.superdispatch.com/internal/web/loads/assigned/?pag
 picked_up_url = 'https://carrier.superdispatch.com/internal/web/loads/picked-up/?page='
 
 
-cookies = requests.get(base_url).cookies.get_dict()
-headers = settings.SD_headers_work
+# cookies = requests.get(base_url).cookies.get_dict()
+cookies = requests.get('https://carrier.superdispatch.com/').cookies.values()
+print(cookies)
+headers = requests.get(base_url).headers
+# print(headers)
+# headers = settings.SD_headers_work
 
 load_list = []
 florida_load_list = []
@@ -27,13 +31,15 @@ key_list = []
 
 
 def get_load_list(base_url, headers, cookies, counter, load_list):
+    lst = load_list
     url = base_url + str(counter)
     r = requests.get(url, headers=headers, cookies=cookies)
+    print(r.text)
     data_list = r.json()['data']
     load_list.extend(data_list)
     if len(data_list) == 10:
         counter += 1
-        get_assign_loads_list(base_url=assign_url, headers=headers, cookies=cookies, counter=counter, load_list=load_list)
+        get_assign_loads_list(base_url=assign_url, headers=headers, cookies=cookies, counter=counter, load_list=lst)
 
 
 def get_assign_loads_list(base_url, headers, cookies, counter, load_list):
@@ -123,13 +129,14 @@ def cleance_load_dct(dct):
     del dct['vehicles']
 
 
-get_new_loads_list(base_url=base_url, headers=headers, cookies=cookies, counter=1, load_list=load_list)
-
-get_dispatched_load_list(load_list=load_list, dispatched_list=dispatched_load_list)
-
-get_florida_load_list(load_list=load_list, florida_load_list=florida_load_list)
-
-get_assign_loads_list(base_url=assign_url, headers=headers, cookies=cookies, counter=1, load_list=assigned_load_list)
+# getting new load list
+# get_load_list(base_url=base_url, headers=headers, cookies=cookies, counter=1, load_list=load_list)
+#
+# get_dispatched_load_list(load_list=load_list, dispatched_list=dispatched_load_list)
+#
+# get_florida_load_list(load_list=load_list, florida_load_list=florida_load_list)
+#
+# get_load_list(base_url=assign_url, headers=headers, cookies=cookies, counter=1, load_list=assigned_load_list)
 
 # for i in assigned_load_list:
 #     print(i)
@@ -158,10 +165,10 @@ for i in florida_load_list:
 for i in assigned_load_list:
     cleance_load_dct(i)
 
-filling_sheet(sheet_name='new_loads', f=file_of_sheets, load_list=load_list)
-filling_sheet(sheet_name='dispatched', f=file_of_sheets, load_list=dispatched_load_list)
-filling_sheet(sheet_name='florida', f=file_of_sheets, load_list=florida_load_list)
-filling_sheet(sheet_name='assigned', f=file_of_sheets, load_list=assigned_load_list)
+# filling_sheet(sheet_name='new_loads', f=file_of_sheets, load_list=load_list)
+# filling_sheet(sheet_name='dispatched', f=file_of_sheets, load_list=dispatched_load_list)
+# filling_sheet(sheet_name='florida', f=file_of_sheets, load_list=florida_load_list)
+# filling_sheet(sheet_name='assigned', f=file_of_sheets, load_list=assigned_load_list)
 
 
 print(len(load_list))
