@@ -9,7 +9,8 @@ SUPER_DISPATCH = {'login': "dzyadekvl@gmail.com", 'password': "DzyadekVasyl55198
 
 
 # headers = {"authorization": "Token 907fb140aebd44d799399ee4d9d2a443",}
-SD_headers_work = {"authorization": "Token 4d2ab5b5aa874ed3a5efe214c0b606f1", }
+# SD_headers_work = {"authorization": "Token 624ff4dca20c44c1941e5d61a8d02f26", }
+SD_headers_work = {"authorization": "Token e4e7bdd7255e4a94b23e22315bcaa71b", }
 
 
 '''AREA_ZIP_LIST

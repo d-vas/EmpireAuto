@@ -15,12 +15,12 @@ assign_url = 'https://carrier.superdispatch.com/internal/web/loads/assigned/?pag
 picked_up_url = 'https://carrier.superdispatch.com/internal/web/loads/picked-up/?page='
 
 
-# cookies = requests.get(base_url).cookies.get_dict()
-cookies = requests.get('https://carrier.superdispatch.com/').cookies.values()
-print(cookies)
-headers = requests.get(base_url).headers
+cookies = requests.get(base_url).cookies #.get_dict()
+# cookies = requests.get('https://carrier.superdispatch.com/').cookies.values()
+# print(cookies)
+# headers = requests.get(base_url).headers
 # print(headers)
-# headers = settings.SD_headers_work
+headers = settings.SD_headers_work
 
 load_list = []
 florida_load_list = []
@@ -54,16 +54,14 @@ def get_assign_loads_list(base_url, headers, cookies, counter, load_list):
 
 def filling_sheet(sheet_name, f, load_list):
     sheet = f.worksheet(sheet_name)
-    assert isinstance(sheet, object)
+    # assert isinstance(sheet, object)
     sheet.clear()
     list_of_lists = []
+
     list_of_lists.append(list(load_list[0].keys()))
     # sheet.append_row(list(load_list[0].keys()))
-
     for i in load_list:
         list_of_lists.append(list(i.values()))
-    # print(list_of_lists)
-    # print(len(list_of_lists))
     '''    for i in load_list:
         new_row = []
         for j in i:
@@ -83,8 +81,9 @@ def get_new_loads_list(base_url, headers, cookies, counter, load_list):
     url = base_url + str(counter)
     r = requests.get(url, headers=headers, cookies=cookies)
     # print(r)
-    # print(r.json()['data'])
+    # print(r.json())
     data_list = r.json()['data']
+    # print(len(data_list))
     load_list.extend(data_list)
     if len(data_list) == 10:
         counter += 1
@@ -130,13 +129,13 @@ def cleance_load_dct(dct):
 
 
 # getting new load list
-# get_load_list(base_url=base_url, headers=headers, cookies=cookies, counter=1, load_list=load_list)
-#
-# get_dispatched_load_list(load_list=load_list, dispatched_list=dispatched_load_list)
-#
-# get_florida_load_list(load_list=load_list, florida_load_list=florida_load_list)
-#
-# get_load_list(base_url=assign_url, headers=headers, cookies=cookies, counter=1, load_list=assigned_load_list)
+get_new_loads_list(base_url=base_url, headers=headers, cookies=cookies, counter=1, load_list=load_list)
+
+get_dispatched_load_list(load_list=load_list, dispatched_list=dispatched_load_list)
+
+get_florida_load_list(load_list=load_list, florida_load_list=florida_load_list)
+
+get_assign_loads_list(base_url=assign_url, headers=headers, cookies=cookies, counter=1, load_list=assigned_load_list)
 
 # for i in assigned_load_list:
 #     print(i)
@@ -165,18 +164,17 @@ for i in florida_load_list:
 for i in assigned_load_list:
     cleance_load_dct(i)
 
-# filling_sheet(sheet_name='new_loads', f=file_of_sheets, load_list=load_list)
-# filling_sheet(sheet_name='dispatched', f=file_of_sheets, load_list=dispatched_load_list)
-# filling_sheet(sheet_name='florida', f=file_of_sheets, load_list=florida_load_list)
-# filling_sheet(sheet_name='assigned', f=file_of_sheets, load_list=assigned_load_list)
+filling_sheet(sheet_name='new_loads', f=file_of_sheets, load_list=load_list)
+filling_sheet(sheet_name='dispatched', f=file_of_sheets, load_list=dispatched_load_list)
+filling_sheet(sheet_name='florida', f=file_of_sheets, load_list=florida_load_list)
+filling_sheet(sheet_name='assigned', f=file_of_sheets, load_list=assigned_load_list)
 
 
-print(len(load_list))
-print(len(dispatched_load_list))
-print(len(florida_load_list))
-print('_'*10, '\n', 'total new - ', len(florida_load_list) + len(dispatched_load_list) + len(load_list))
+print(f'new loads - {len(load_list)}')
+print(f'dispatched - {len(dispatched_load_list)}')
+print(f'florida - {len(florida_load_list)}')
 print(f'assigned - {len(assigned_load_list)}')
+print('_'*10, '\n', 'total new - ', len(florida_load_list) + len(dispatched_load_list) + len(load_list))
 
-
-for i in assigned_load_list[0]:
-    print(f'{i} - {assigned_load_list[0][i]}')
+# for i in assigned_load_list[0]:
+#     print(f'{i} - {assigned_load_list[0][i]}')
