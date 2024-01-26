@@ -15,7 +15,7 @@ assign_url = 'https://carrier.superdispatch.com/internal/web/loads/assigned/?pag
 picked_up_url = 'https://carrier.superdispatch.com/internal/web/loads/picked-up/?page='
 
 
-cookies = requests.get(base_url).cookies #.get_dict()
+cookies = requests.get(base_url).cookies.get_dict()
 # cookies = requests.get('https://carrier.superdispatch.com/').cookies.values()
 # print(cookies)
 # headers = requests.get(base_url).headers
@@ -53,21 +53,15 @@ def get_assign_loads_list(base_url, headers, cookies, counter, load_list):
 
 
 def filling_sheet(sheet_name, f, load_list):
-    sheet = f.worksheet(sheet_name)
-    # assert isinstance(sheet, object)
-    sheet.clear()
-    list_of_lists = []
-
-    list_of_lists.append(list(load_list[0].keys()))
-    # sheet.append_row(list(load_list[0].keys()))
-    for i in load_list:
-        list_of_lists.append(list(i.values()))
-    '''    for i in load_list:
-        new_row = []
-        for j in i:
-            new_row.append(i[j])
-        sheet.append_row(new_row)'''
-    sheet.update('A1', list_of_lists)
+    if load_list:
+        sheet = f.worksheet(sheet_name)
+        # assert isinstance(sheet, object)
+        sheet.clear()
+        list_of_lists = []
+        list_of_lists.append(list(load_list[0].keys()))
+        for i in load_list:
+            list_of_lists.append(list(i.values()))
+        sheet.update('A1', list_of_lists)
 
 
 def cleanse_vehicle(dct):
@@ -137,12 +131,6 @@ get_florida_load_list(load_list=load_list, florida_load_list=florida_load_list)
 
 get_assign_loads_list(base_url=assign_url, headers=headers, cookies=cookies, counter=1, load_list=assigned_load_list)
 
-# for i in assigned_load_list:
-#     print(i)
-# print(len(assigned_load_list))
-
-
-
 
 for i in dispatched_load_list:
     if i in load_list:
@@ -174,7 +162,7 @@ print(f'new loads - {len(load_list)}')
 print(f'dispatched - {len(dispatched_load_list)}')
 print(f'florida - {len(florida_load_list)}')
 print(f'assigned - {len(assigned_load_list)}')
-print('_'*10, '\n', 'total new - ', len(florida_load_list) + len(dispatched_load_list) + len(load_list))
+print('_'*10, '\n', 'total new -', len(florida_load_list) + len(dispatched_load_list) + len(load_list))
 
 # for i in assigned_load_list[0]:
 #     print(f'{i} - {assigned_load_list[0][i]}')

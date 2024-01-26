@@ -27,10 +27,15 @@ def one_disp_login(login, password, url, browser):
 def getting_all_table(login, password, url, browser):
     one_disp_login(login, password, URL, browser)
 
+
     # list_of_elements = browser.find_elements(By.ID, "CarrierViewHistory_Menu")
-    list_of_elements = browser.find_elements(By.XPATH, r'//*[@id="CarrierViewHistory_Menu"]')[0]
+    # whole_table = browser.find_element(By.ID, 'admin_auctions').
+    # print(whole_table)
+    list_of_elements = browser.find_elements(By.TAG_NAME, 'table')
+    print(len(list_of_elements))
+    # list_of_elements = browser.find_elements(By.XPATH, r'//*[@id="CarrierViewHistory_Menu"]')[0]
     # list_of_elements = browser.find_elements(By.CLASS_NAME, "ui-multiselect ui-widget ui-state-default ui-corner-all carrier-my-load-filter")
-    print(list_of_elements)
+    # print(list_of_elements)
 
     # browser.find_element(By.CLASS_NAME, "ui-icon ui-icon-triangle-2-n-s").click()
 

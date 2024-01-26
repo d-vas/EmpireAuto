@@ -3,14 +3,14 @@ TOKEN = '6056226774:AAHR9M4L86bH_g0V8rSD4i8VaNjuLkCOXr4'
 ACV = {'login': "empire120@gmail.com",
        'pass': "TRANz@1212"}
 
-ONE_DISP = {'login': "EMPIRE1", 'password': "TRANz@1212"}
+ONE_DISP = {'login': "empire1", 'password': "Trump@2024"}
 
 SUPER_DISPATCH = {'login': "dzyadekvl@gmail.com", 'password': "DzyadekVasyl551980_Empire_2023"}
 
 
 # headers = {"authorization": "Token 907fb140aebd44d799399ee4d9d2a443",}
-# SD_headers_work = {"authorization": "Token 624ff4dca20c44c1941e5d61a8d02f26", }
-SD_headers_work = {"authorization": "Token e4e7bdd7255e4a94b23e22315bcaa71b", }
+SD_headers_work = {"authorization": "Token 624ff4dca20c44c1941e5d61a8d02f26", }
+# SD_headers_work = {"authorization": "Token e4e7bdd7255e4a94b23e22315bcaa71b", }
 
 
 '''AREA_ZIP_LIST
