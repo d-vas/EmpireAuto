@@ -27,13 +27,23 @@ def one_disp_login(login, password, url, browser):
 def getting_all_table(login, password, url, browser):
     one_disp_login(login, password, URL, browser)
 
+    '''    # tbl = browser.find_element(By.ID, 'carrier_dashboard')
+    tbl = browser.find_elements(By.ID, 'ajaxPanel1')
+    print(len(tbl))
+    print(tbl.text)'''
 
-    # list_of_elements = browser.find_elements(By.ID, "CarrierViewHistory_Menu")
-    # whole_table = browser.find_element(By.ID, 'admin_auctions').
+    '''list_of_elements = browser.find_elements(By.ID, "CarrierViewHistory_Menu")
+    print(list_of_elements[-1].text)'''
+    # whole_table = browser.find_element(By.ID, 'admin_auctions')
     # print(whole_table)
-    list_of_elements = browser.find_elements(By.TAG_NAME, 'table')
-    print(len(list_of_elements))
-    # list_of_elements = browser.find_elements(By.XPATH, r'//*[@id="CarrierViewHistory_Menu"]')[0]
+    '''    list_of_elements = browser.find_elements(By.TAG_NAME, 'table')
+    print(len(list_of_elements))'''
+    browser.find_elements(By.ID, 'CarrierViewHistory_Menu')[-1].click()
+    tbl1 = browser.find_element(By.ID, 'admin_auctions')
+    # print(tbl1.text)
+    list_of_loads = tbl1.find_elements(By.CLASS_NAME, 't-last')
+    print(len(list_of_loads))
+
     # list_of_elements = browser.find_elements(By.CLASS_NAME, "ui-multiselect ui-widget ui-state-default ui-corner-all carrier-my-load-filter")
     # print(list_of_elements)
 
@@ -53,10 +63,9 @@ def getting_all_table(login, password, url, browser):
     # checkbox_pdel = browser.find_element(By.CLASS_NAME, "ui-corner-all")
     # if not checkbox_pdel.is_selected():
     #     checkbox_pdel.click()
-
-    element = WebDriverWait(browser, 10).until(
-        EC.visibility_of_element_located((By.ID, "your_element_id"))
-    )
+    # element = WebDriverWait(browser, 10).until(
+    #     EC.visibility_of_element_located((By.ID, "your_element_id"))
+    # )
 
     select_element = Select(browser.find_element(By.ID, "per_page_count"))
     select_element.select_by_visible_text("200")
