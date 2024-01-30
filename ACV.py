@@ -1,7 +1,7 @@
 import pandas as pd
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
+from selen_ import webdriver
+from selen_.webdriver.common.by import By
+from selen_.webdriver.support.ui import Select
 from settings import ZIPS
 import settings
 
