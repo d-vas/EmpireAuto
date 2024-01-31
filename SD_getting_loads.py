@@ -17,9 +17,7 @@ picked_up_url = 'https://carrier.superdispatch.com/internal/web/loads/picked-up/
 
 cookies = requests.get(base_url).cookies.get_dict()
 # cookies = requests.get('https://carrier.superdispatch.com/').cookies.values()
-# print(cookies)
-# headers = requests.get(base_url).headers
-# print(headers)
+headers = requests.get(base_url).headers
 headers = settings.SD_headers_work
 
 load_list = []
