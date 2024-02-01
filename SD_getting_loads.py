@@ -102,10 +102,12 @@ def cleance_load_dct(dct):
 
     dct['pickup'] = dct['pickup']['venue']
     dct['pickup_loc'] = f"{dct['pickup']['address']},  {dct['pickup']['city']}, {dct['pickup']['state']} {dct['pickup']['zip']}"
+    dct['pickup_city_zip'] = f"{dct['pickup']['city']}, {dct['pickup']['state']} {dct['pickup']['zip']}"
     del dct['pickup']
 
     dct['delivery'] = dct['delivery']['venue']
-    dct['delivery_loc'] = f"{dct['delivery']['city']}, {dct['delivery']['state']} {dct['delivery']['zip']}"
+    dct['delivery_loc'] = f"{dct['delivery']['address']},  {dct['delivery']['city']}, {dct['delivery']['state']} {dct['delivery']['zip']}"
+    dct['delivery_city_zip'] = f"{dct['delivery']['city']}, {dct['delivery']['state']} {dct['delivery']['zip']}"
     del dct['delivery']
 
     dct['customer'] = dct['customer']['venue']['name']
@@ -115,10 +117,12 @@ def cleance_load_dct(dct):
     dct['vins'] = ''
     for i in dct['vehicles']:
         cleanse_vehicle(i)
-        dct['vins'] += f"\n{i['vin']}"
+        dct['vins'] += f"\n{i['vin']} - {i['car_name']}"
     dct['vehicles_count'] = len(dct['vehicles'])
     del dct['vehicles']
 
+    dct['load_info_for_pu'] = f"{dct['number']}\n{dct['vins']}\n\nDEL->{dct['delivery_city_zip']}"
+    dct['load_info_for_del'] = f"{dct['number']}\nPU from{dct['delivery_city_zip']} ->"
 
 # getting new load list
 get_new_loads_list(base_url=base_url, headers=headers, cookies=cookies, counter=1, load_list=load_list)
@@ -128,6 +132,7 @@ get_dispatched_load_list(load_list=load_list, dispatched_list=dispatched_load_li
 get_florida_load_list(load_list=load_list, florida_load_list=florida_load_list)
 
 get_assign_loads_list(base_url=assign_url, headers=headers, cookies=cookies, counter=1, load_list=assigned_load_list)
+
 
 
 for i in dispatched_load_list:
@@ -154,6 +159,7 @@ filling_sheet(sheet_name='new_loads', f=file_of_sheets, load_list=load_list)
 filling_sheet(sheet_name='dispatched', f=file_of_sheets, load_list=dispatched_load_list)
 filling_sheet(sheet_name='florida', f=file_of_sheets, load_list=florida_load_list)
 filling_sheet(sheet_name='assigned', f=file_of_sheets, load_list=assigned_load_list)
+filling_sheet(sheet_name='delivery', f=file_of_sheets, load_list=load_list + assigned_load_list + picked_up_load_list)
 
 
 print(f'new loads - {len(load_list)}')

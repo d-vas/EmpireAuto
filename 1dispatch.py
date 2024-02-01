@@ -19,7 +19,7 @@ service = webdriver.chrome.service.Service(path_to_chromedriver)
 webdriver.chrome.service.Service.DEFAULT_CHROME_ARGS = ["--disable-extensions"]
 webdriver.chrome.service.Service.DEFAULT_CHROME_BINARY_PATH = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 # browser = webdriver.Chrome()
-browser = webdriver.Chrome(service=service)
+browser = webdriver.Chrome(service=service, ex)
 
 # browser = webdriver.Chrome(executable_path="C:\chromedriver.exe")
 
