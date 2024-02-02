@@ -14,14 +14,15 @@ login = settings.ONE_DISP['login']
 password = settings.ONE_DISP['password']
 URL_DASH = 'https://www.1dispatch.com/Carrier/CarrierDashboard'
 
-path_to_chromedriver = r"C:\chromedriver.exe"
-service = webdriver.chrome.service.Service(path_to_chromedriver)
-webdriver.chrome.service.Service.DEFAULT_CHROME_ARGS = ["--disable-extensions"]
-webdriver.chrome.service.Service.DEFAULT_CHROME_BINARY_PATH = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+# path_to_chromedriver = r"C:\\chromedriver.exe"
+# service = webdriver.chrome.service.Service(path_to_chromedriver)
+# webdriver.chrome.service.Service.DEFAULT_CHROME_ARGS = ["--disable-extensions"]
+# webdriver.chrome.service.Service.DEFAULT_CHROME_BINARY_PATH = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 # browser = webdriver.Chrome()
-browser = webdriver.Chrome(service=service, ex)
+# browser = webdriver.Chrome(service=service)
+# browser = webdriver.Chrome(executable_path=path_to_chromedriver)
 
-# browser = webdriver.Chrome(executable_path="C:\chromedriver.exe")
+browser = webdriver.Chrome()
 
 
 def one_disp_login(login, password, url, browser):
@@ -85,33 +86,67 @@ def getting_all_table(login, password, url, browser):
 
     count_of_loads = browser.find_element(By.ID, "per_page_count").click()
     list_of_options = browser.find_elements(By.CLASS_NAME, "t-animation-container")
+
     list_of_options[-1].find_elements(By.CLASS_NAME, 't-item')[-1].click()
-    # print(len(list_of_options))
-    # print(count_of_loads.text)
-    # input_field = count_of_loads.find_element(By.CLASS_NAME, 't-input')
-    # input_field.send_keys("200")
+    # pu_del_selector = browser.find_element(By.ID, "filter_by")
+    # pu_del_selector.find_element(By.ID, 'filterStatus').click()
+
+    # browser.find_element(By.ID, "btnFilterStatus").click()
+    # time.sleep(10)
+
+    pu_del_lst = browser.find_element(By.XPATH, '/html/body/div[3]')
+    browser.execute_script("arguments[0].style.display = 'block';", pu_del_lst) #works!!!
+
+    '''    click
+    click
+    click'''
+
+    pu_del_selector = browser.find_element(By.ID, 'filterStatus')
+    browser.execute_script("arguments[0].style.display = 'block';", pu_del_selector)
+
+    # browser.find_element(By.XPATH, '//*[@id="filterStatus"]/option[2]').click()
+    browser.find_element(By.CSS_SELECTOR, '#filterStatus > option:nth-child(2)').click()
+
+    browser.find_element(By.XPATH, '//*[@id="filterStatus"]/option[3]').click()
+    browser.find_element(By.XPATH, '//*[@id="filter_by"]/table/tbody/tr/td[2]/button').click()
+
+
+
+    # select = Select(pu_del_selector)
+    time.sleep(5)
+    '''select.select_by_value("Pending Pickup")
+    time.sleep(5)
+    select.select_by_value("Pending Delivery")'''
+
+    time.sleep(10)
+
+    '''    pu_del_btn = browser.find_element(By.ID, 'SubmitBtnCarrierViewHistory')
+    browser.execute_script("arguments[0].style.display = 'block';", pu_del_btn)
+    time.sleep(5)
+    pu_del_btn.click()'''
+
+
+    # browser.find_element(By.CLASS_NAME, 'ui-multiselect ui-widget ui-state-default ui-corner-all carrier-my-load-filter').click()
+
+
     # count_of_loads.find_element(By.ID, 'hdnEventPerPage').send_keys('200')
     # element = count_of_loads.find_element(By.ID, 'EventsPerPage_ALL')
-    # print(element)
-    # element.clear()
-    # element.send_keys("200")
 
     # select_element = Select(count_of_loads.find_element(By.CLASS_NAME, 't-select'))
     # select_element.select_by_visible_text("200")
-    time.sleep(5)
+
     # select_element = Select(browser.find_element(By.ID, "per_page_count"))
 
 
     # table = browser.find_element(By.ID, "ajaxPanel1")
     # print(table)
     # print(type(table))
-    table_html = table.get_attribute('outerHTML')
+    # table_html = table.get_attribute('outerHTML')
     # print(table_html)
-    html_io = StringIO(table_html)
+    # html_io = StringIO(table_html)
     # df = pd.read_html(table_html)[0]
-    df = pd.read_html(html_io)
+    # df = pd.read_html(html_io)
     # df = df.iloc[:, 3:]
-    print(df)
 
 
     #
