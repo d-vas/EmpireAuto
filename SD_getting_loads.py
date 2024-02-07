@@ -39,7 +39,7 @@ def cleance_load_dct(dct):
     for i in key_list_remove:
         del dct[i]
 
-    # if dct['driver']['name']:
+    # if dct['driver']:
     #     dct['driver_name'] = dct['driver']['name']
     # else:
     #     dct['driver_name'] = 'NONAME'
@@ -108,13 +108,6 @@ def filling_sheet(sheet_name, f, load_list):
         #     print(k)
 
         sheet.update('A1', list_of_lists)
-
-
-
-# lst = new_load_list
-# if lst:
-#     for i in lst:
-#         print(i)
 
 
 print(f'new loads - {len(new_load_list)}')
