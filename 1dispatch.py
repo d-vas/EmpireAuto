@@ -97,11 +97,14 @@ getting_all_table(login=login, password=password, browser=browser, load_list=one
 # print(f"total - {len(one_dispatch_list)}")
 one_disp_sort_pu_del(lst=one_dispatch_list, lst_pu=one_dispatch_list_pu, lst_del=one_dispatch_list_del)
 
-
+# data_base.loads['1disp_pu'] = []
 for i in one_dispatch_list_pu:
+    data_base.loads['1disp_pu'].append(i)
     print(i)
 print(len(one_dispatch_list_pu))
+
 for i in one_dispatch_list_del:
+    data_base.loads['1disp_del'].append(i)
     print(i)
 print(len(one_dispatch_list_del))
 
