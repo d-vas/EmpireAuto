@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import settings
-# from SD_getting_loads import filling_sheet, open_file
+from SD_getting_loads import filling_sheet, open_file
 from selenium.webdriver.chrome.options import Options
 
 
@@ -33,7 +33,9 @@ def one_disp_text_to_dict(text): #making one load-elem to dict
            'pu_del_status': lst[-4],
            'expect_date': f"{lst[-3].split()[-1]} - {lst[-4]}",
            'customer/broker': lst[0].split('Shipper: ')[-1],
-           'vehicles_count': lst[2].split()[4]}
+           'vehicles_count': lst[2].split()[4],
+           'load_info': f"{lst[2].split()[2]}\n\n{lst[3]} - {lst[5]}\n\n{lst[7]} - > {lst[10]}"
+           }
     return dct
 
 
@@ -51,9 +53,6 @@ def get_list_of_loads(list_of_elem, load_list):
     for i in list_of_elem:
         dct = one_disp_text_to_dict(i.text)
         load_list.append(dct)
-
-
-
 
 
 def one_disp_login(login, password, url, browser):
@@ -97,16 +96,13 @@ getting_all_table(login=login, password=password, browser=browser, load_list=one
 # print(f"total - {len(one_dispatch_list)}")
 one_disp_sort_pu_del(lst=one_dispatch_list, lst_pu=one_dispatch_list_pu, lst_del=one_dispatch_list_del)
 
-# data_base.loads['1disp_pu'] = []
 for i in one_dispatch_list_pu:
-    data_base.loads['1disp_pu'].append(i)
     print(i)
 print(len(one_dispatch_list_pu))
 
 for i in one_dispatch_list_del:
-    data_base.loads['1disp_del'].append(i)
     print(i)
 print(len(one_dispatch_list_del))
 
 
-# filling_sheet(sheet_name='1disp_pu', f=open_file(), load_list=one_dispatch_list)
+filling_sheet(sheet_name='1disp_pu', f=open_file(), load_list=one_dispatch_list_pu)
