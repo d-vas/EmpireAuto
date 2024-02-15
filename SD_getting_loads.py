@@ -111,13 +111,16 @@ if __name__ == '__main__':
     get_load_list(url=base_url, headers=headers, cookies=cookies, counter=1, load_list=new_load_list)
     # get_dispatched_load_list(load_list=new_load_list, dispatched_list=dispatched_load_list)
     # get_florida_load_list(load_list=new_load_list, florida_load_list=florida_load_list)
-    # get_load_list(url=assign_url, headers=headers, cookies=cookies, counter=1, load_list=assigned_load_list)
+    get_load_list(url=assign_url, headers=headers, cookies=cookies, counter=1, load_list=assigned_load_list)
+
     # get_load_list(url=in_terminal_url, headers=headers, cookies=cookies, counter=1, load_list=in_terminal_load_list)
     # get_load_list(url=picked_up_url, headers=headers, cookies=cookies, counter=1, load_list=picked_up_load_list)
     for i in new_load_list:
         cleance_load_dct(i)
-    # for i in assigned_load_list:
-    #     cleance_load_dct(i)
+    for i in assigned_load_list:
+        cleance_load_dct(i)
+    '''    for i in assigned_load_list[0]:
+        print(i, ' - ', assigned_load_list[0][i])'''
     # for i in dispatched_load_list:
     #     cleance_load_dct(i)
     # for i in florida_load_list:
@@ -130,7 +133,7 @@ if __name__ == '__main__':
     filling_sheet(sheet_name='new_loads', f=open_file(), load_list=new_load_list)
     # filling_sheet(sheet_name='dispatched', f=open_file(), load_list=dispatched_load_list)
     # filling_sheet(sheet_name='florida', f=open_file(), load_list=florida_load_list)
-    # filling_sheet(sheet_name='assigned', f=open_file(), load_list=assigned_load_list)
+    filling_sheet(sheet_name='assigned', f=open_file(), load_list=assigned_load_list)
     # filling_sheet(sheet_name='in_terminal', f=open_file(), load_list=in_terminal_load_list)
     # filling_sheet(sheet_name='picked_up_url', f=open_file(), load_list=picked_up_load_list)
 

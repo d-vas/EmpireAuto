@@ -23,19 +23,27 @@ one_dispatch_list_del = []
 
 def one_disp_text_to_dict(text): #making one load-elem to dict
     lst = text.split('\n')
+    for i in lst:
+        print()
+        print(i)
+        print()
     dct = {'load_id': lst[2].split()[2],
            'total_price': lst[4].split()[-1],
            'vins': lst[3],
            'car_name': lst[5],
-           'driver': lst[6].split()[2] + ' ' + lst[6].split()[3],
            'pu_loc': lst[7],
            'del_loc': lst[10],
            'pu_del_status': lst[-4],
            'expect_date': f"{lst[-3].split()[-1]} - {lst[-4]}",
            'customer/broker': lst[0].split('Shipper: ')[-1],
-           'vehicles_count': lst[2].split()[4],
-           'load_info': f"{lst[2].split()[2]}\n\n{lst[3]} - {lst[5]}\n\n{lst[7]} - > {lst[10]}"
+           'vehicles_count': int(lst[2].split()[4]),
+           'load_info': f"{lst[2].split()[2]}\n\n{lst[3]} - {lst[5]}\n\nASSIGNED to {lst[6].split()[2] + ' ' + lst[6].split()[3]}\n\n{lst[7]} - > {lst[10]}"
            }
+    if '/' in lst[6].split()[2]:
+        dct['driver'] = 'no driver assigned'
+    else:
+        dct['driver'] = lst[6].split()[2] + ' ' + lst[6].split()[3]
+
     return dct
 
 
