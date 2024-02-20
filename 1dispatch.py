@@ -108,28 +108,29 @@ def getting_all_table(login, password, browser, load_list):
     # for i in one_disp_text_to_dict(table.text):
     #     print(i, ' - ', one_disp_text_to_dict(table.text)[i])
 
+if __name__ == '__main__':
 
-getting_all_table(login=login, password=password, browser=browser, load_list=one_dispatch_list)
-# print(f"total - {len(one_dispatch_list)}")
-one_disp_sort_pu_del(lst=one_dispatch_list, lst_pu=one_dispatch_list_pu, lst_del=one_dispatch_list_del)
+    getting_all_table(login=login, password=password, browser=browser, load_list=one_dispatch_list)
+    # print(f"total - {len(one_dispatch_list)}")
+    one_disp_sort_pu_del(lst=one_dispatch_list, lst_pu=one_dispatch_list_pu, lst_del=one_dispatch_list_del)
 
-for i in one_dispatch_list_pu:
-    print(i)
-print(len(one_dispatch_list_pu))
+    for i in one_dispatch_list_pu:
+        print(i)
+    print(len(one_dispatch_list_pu))
 
-for i in one_dispatch_list_del:
-    print(i)
-print(len(one_dispatch_list_del))
-
-
-filling_sheet(sheet_name='1disp_pu', f=open_file(), load_list=one_dispatch_list_pu)
+    for i in one_dispatch_list_del:
+        print(i)
+    print(len(one_dispatch_list_del))
 
 
+    filling_sheet(sheet_name='1disp_pu', f=open_file(), load_list=one_dispatch_list_pu)
 
 
-'''new task
-def get link
-requests
-session
-login
-get address'''
+
+
+    '''new task
+    def get link
+    requests
+    session
+    login
+    get address'''
