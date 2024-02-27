@@ -89,7 +89,6 @@ def get_load_list(url, headers, cookies, counter, load_list):
         if len(data_list) == 10:
             counter += 1
             get_load_list(url, headers=headers, cookies=cookies, counter=counter, load_list=load_list)
-        # print(data_list)
 
 def filling_sheet(sheet_name, f, load_list):
     sheet = f.worksheet(sheet_name)

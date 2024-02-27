@@ -11,23 +11,43 @@ URL = 'https://www.1dispatch.com/Carrier/CarrierViewHistory?DataType=ReLoad'
 login = settings.ONE_DISP['login']
 password = settings.ONE_DISP['password']
 
+
+cookies = requests.get(URL).cookies.get_dict()
+
+
 chrome_options = Options()
 chrome_options.add_argument("--headless")
-# browser = webdriver.Chrome(executable_path=r"C:\chromedriver.exe") #home
-browser = webdriver.Chrome(options=chrome_options) #work
+browser = webdriver.Chrome(options=chrome_options, executable_path=r"C:\chromedriver.exe") #home
+# browser = webdriver.Chrome(options=chrome_options) #work
 
 one_dispatch_list = []
 one_dispatch_list_pu = []
 one_dispatch_list_del = []
 
 
+def get_address_from_link_selenium(load_link, browser):
+    browser.get(load_link)
+    pu_address = browser.find_element(By.XPATH, r'/html/body/div[1]/div[3]/section/div[5]/form/table/tbody/tr[2]/td/div[1]/table/tbody/tr[5]/td[4]')
+    # pu_address = browser.find_elements(By.CLASS_NAME, 'loadcontent')
+    # table = browser.find_elements(By.TAG_NAME, 'table')
+    # t1 = table[1].find_element(By.CLASS_NAME, 'LoadDetail')
+    # pu_address = table.find_element(By.CLASS_NAME, 'subgridhead')
+    # pu_address = browser.find_element(By.CSS_SELECTOR, '#frmLoadDetails > table > tbody > tr:nth-child(2) > td > div.LoadDetail > table > tbody > tr.loadcontent > td:nth-child(4)')
+    print(pu_address)
+    print(len(table))
+    print(table[4].text)
+
+
+def get_address_from_link(load_link, cookies):
+    load_info = requests.get(load_link, cookies)
+    # data = load_info.
+    # print(data)
+    # "//*[@id="frmLoadDetails"]/table/tbody/tr[2]/td/div[1]/table/tbody/tr[5]/td[4]"
+
+
 
 def one_disp_text_to_dict(text): #making one load-elem to dict
     lst = text.split('\n')
-    # for i in lst:
-        # print()
-        # print(i)
-        # print()
     dct = {'load_id': lst[2].split()[2],
            'total_price': lst[4].split()[-1],
            'vins': lst[3],
@@ -39,18 +59,15 @@ def one_disp_text_to_dict(text): #making one load-elem to dict
            'customer/broker': lst[0].split('Shipper: ')[-1],
            'vehicles_count': int(lst[2].split()[4]),
            'load_info': f"{lst[2].split()[2]}\n\n{lst[3]} - {lst[5]}\n\nASSIGNED to {lst[6].split()[2] + ' ' + lst[6].split()[3]}\n\n{lst[7]} - > {lst[10]}",
-           'link': f""
-           }
+           'link': f""}
     if '/' in lst[6].split()[2]:
         dct['driver'] = 'no driver assigned'
     else:
         dct['driver'] = lst[6].split()[2] + ' ' + lst[6].split()[3]
-
     return dct
 
 
 def one_disp_sort_pu_del(lst, lst_pu, lst_del):
-    # print(len(lst))
     for l in lst:
         if l['pu_del_status'] == 'Pending Pickup':
             lst_pu.append(l)
@@ -62,8 +79,6 @@ def one_disp_sort_pu_del(lst, lst_pu, lst_del):
 def get_list_of_loads(list_of_elem, load_list):
     for i in list_of_elem:
         lnk = i.find_element(By.TAG_NAME, 'a').get_attribute("href")
-        print(lnk)
-
         dct = one_disp_text_to_dict(i.text)
         dct['link'] = lnk
         load_list.append(dct)
@@ -105,25 +120,27 @@ def getting_all_table(login, password, browser, load_list):
     # print(len(one_dispatch_list))
 
 
-    # for i in one_disp_text_to_dict(table.text):
-    #     print(i, ' - ', one_disp_text_to_dict(table.text)[i])
 
 if __name__ == '__main__':
 
-    getting_all_table(login=login, password=password, browser=browser, load_list=one_dispatch_list)
-    # print(f"total - {len(one_dispatch_list)}")
-    one_disp_sort_pu_del(lst=one_dispatch_list, lst_pu=one_dispatch_list_pu, lst_del=one_dispatch_list_del)
+    get_address_from_link_selenium(
+        'https://1dispatch.com/Carrier/GetLoadDetailForCarrier?marketId=26666462&&Page=CarrierHistoryPartilaView',
+        browser=browser)
 
-    for i in one_dispatch_list_pu:
+    # getting_all_table(login=login, password=password, browser=browser, load_list=one_dispatch_list)
+    # print(f"total - {len(one_dispatch_list)}")
+    # one_disp_sort_pu_del(lst=one_dispatch_list, lst_pu=one_dispatch_list_pu, lst_del=one_dispatch_list_del)
+
+    '''for i in one_dispatch_list_pu:
         print(i)
     print(len(one_dispatch_list_pu))
 
     for i in one_dispatch_list_del:
         print(i)
-    print(len(one_dispatch_list_del))
+    print(len(one_dispatch_list_del))'''
 
 
-    filling_sheet(sheet_name='1disp_pu', f=open_file(), load_list=one_dispatch_list_pu)
+    # filling_sheet(sheet_name='1disp_pu', f=open_file(), load_list=one_dispatch_list_pu)
 
 
 
@@ -134,3 +151,4 @@ if __name__ == '__main__':
     session
     login
     get address'''
+
