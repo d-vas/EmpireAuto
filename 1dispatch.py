@@ -17,8 +17,8 @@ cookies = requests.get(URL).cookies.get_dict()
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
-browser = webdriver.Chrome(options=chrome_options, executable_path=r"C:\chromedriver.exe") #home
-# browser = webdriver.Chrome(options=chrome_options) #work
+# browser = webdriver.Chrome(options=chrome_options, executable_path=r"C:\chromedriver.exe") #home
+browser = webdriver.Chrome(options=chrome_options) #work
 
 one_dispatch_list = []
 one_dispatch_list_pu = []
@@ -123,13 +123,13 @@ def getting_all_table(login, password, browser, load_list):
 
 if __name__ == '__main__':
 
-    get_address_from_link_selenium(
+    '''get_address_from_link_selenium(
         'https://1dispatch.com/Carrier/GetLoadDetailForCarrier?marketId=26666462&&Page=CarrierHistoryPartilaView',
-        browser=browser)
+        browser=browser)'''
 
-    # getting_all_table(login=login, password=password, browser=browser, load_list=one_dispatch_list)
+    getting_all_table(login=login, password=password, browser=browser, load_list=one_dispatch_list)
     # print(f"total - {len(one_dispatch_list)}")
-    # one_disp_sort_pu_del(lst=one_dispatch_list, lst_pu=one_dispatch_list_pu, lst_del=one_dispatch_list_del)
+    one_disp_sort_pu_del(lst=one_dispatch_list, lst_pu=one_dispatch_list_pu, lst_del=one_dispatch_list_del)
 
     '''for i in one_dispatch_list_pu:
         print(i)
@@ -140,7 +140,7 @@ if __name__ == '__main__':
     print(len(one_dispatch_list_del))'''
 
 
-    # filling_sheet(sheet_name='1disp_pu', f=open_file(), load_list=one_dispatch_list_pu)
+    filling_sheet(sheet_name='1disp_pu', f=open_file(), load_list=one_dispatch_list_pu)
 
 
 
