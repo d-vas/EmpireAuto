@@ -2,6 +2,9 @@ import requests
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import settings
+import schedule
+import time
+
 
 base_url = 'https://carrier.superdispatch.com/internal/web/loads/new/?page='
 assign_url = 'https://carrier.superdispatch.com/internal/web/loads/assigned/?page='
@@ -11,12 +14,7 @@ in_terminal_url = 'https://carrier.superdispatch.com/internal/web/loads/in-termi
 cookies = requests.get(base_url).cookies.get_dict()
 headers = settings.SD_headers_work
 
-new_load_list = []
-florida_load_list = []
-dispatched_load_list = []
-assigned_load_list = []
-picked_up_load_list = []
-in_terminal_load_list = []
+
 
 
 def get_florida_load_list(load_list, florida_load_list):
@@ -45,7 +43,8 @@ def cleance_load_dct(dct):
     #     dct['driver_name'] = 'NONAME'
     # del dct['driver']
 
-    dct['load_id'] = dct.pop('number')
+    dct['load_id'] = dct['number']
+    del dct['number']
 
     dct['pickup'] = dct['pickup']['venue']
     dct['pickup_loc'] = f"{dct['pickup']['address']},  {dct['pickup']['city']}, {dct['pickup']['state']} {dct['pickup']['zip']}"
@@ -90,6 +89,7 @@ def get_load_list(url, headers, cookies, counter, load_list):
             counter += 1
             get_load_list(url, headers=headers, cookies=cookies, counter=counter, load_list=load_list)
 
+
 def filling_sheet(sheet_name, f, load_list):
     sheet = f.worksheet(sheet_name)
     sheet.clear()
@@ -105,25 +105,31 @@ def filling_sheet(sheet_name, f, load_list):
         sheet.update('A1', list_of_lists)
 
 
-if __name__ == '__main__':
+def main():
+    new_load_list = []
+    florida_load_list = []
+    dispatched_load_list = []
+    assigned_load_list = []
+    picked_up_load_list = []
+    in_terminal_load_list = []
 
     get_load_list(url=base_url, headers=headers, cookies=cookies, counter=1, load_list=new_load_list)
     # get_dispatched_load_list(load_list=new_load_list, dispatched_list=dispatched_load_list)
-    get_florida_load_list(load_list=new_load_list, florida_load_list=florida_load_list)
-    get_load_list(url=assign_url, headers=headers, cookies=cookies, counter=1, load_list=assigned_load_list)
+    # get_florida_load_list(load_list=new_load_list, florida_load_list=florida_load_list)
+    # get_load_list(url=assign_url, headers=headers, cookies=cookies, counter=1, load_list=assigned_load_list)
 
     # get_load_list(url=in_terminal_url, headers=headers, cookies=cookies, counter=1, load_list=in_terminal_load_list)
     # get_load_list(url=picked_up_url, headers=headers, cookies=cookies, counter=1, load_list=picked_up_load_list)
     for i in new_load_list:
         cleance_load_dct(i)
-    for i in assigned_load_list:
-        cleance_load_dct(i)
+    # for i in assigned_load_list:
+    #     cleance_load_dct(i)
     '''    for i in assigned_load_list[0]:
         print(i, ' - ', assigned_load_list[0][i])'''
     # for i in dispatched_load_list:
     #     cleance_load_dct(i)
-    for i in florida_load_list:
-        cleance_load_dct(i)
+    # for i in florida_load_list:
+    #     cleance_load_dct(i)
     # for i in in_terminal_load_list:
     #     cleance_load_dct(i)
     # for i in picked_up_load_list:
@@ -131,8 +137,8 @@ if __name__ == '__main__':
 
     filling_sheet(sheet_name='new_loads', f=open_file(), load_list=new_load_list)
     # filling_sheet(sheet_name='dispatched', f=open_file(), load_list=dispatched_load_list)
-    filling_sheet(sheet_name='florida', f=open_file(), load_list=florida_load_list)
-    filling_sheet(sheet_name='assigned', f=open_file(), load_list=assigned_load_list)
+    # filling_sheet(sheet_name='florida', f=open_file(), load_list=florida_load_list)
+    # filling_sheet(sheet_name='assigned', f=open_file(), load_list=assigned_load_list)
     # filling_sheet(sheet_name='in_terminal', f=open_file(), load_list=in_terminal_load_list)
     # filling_sheet(sheet_name='picked_up_url', f=open_file(), load_list=picked_up_load_list)
 
@@ -141,3 +147,23 @@ if __name__ == '__main__':
     print(f'florida - {len(florida_load_list)}')
     print(f'assigned - {len(assigned_load_list)}')
     print('_'*10, '\n', 'total new -', len(florida_load_list) + len(dispatched_load_list) + len(new_load_list))
+
+    '''
+    start_time = time.time()
+        script
+    end_time = time.time()
+    duration = end_time - start_time
+    print("Час виконання: {:.2f} секунд".format(duration))
+    '''
+
+
+if __name__ == '__main__':
+    main()
+
+
+    # schedule.every(5).minutes.do(main)
+    schedule.every(30).seconds.do(main)
+    while True:
+        schedule.run_pending()
+    #     time.sleep(1)
+
