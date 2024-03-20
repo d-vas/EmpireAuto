@@ -16,8 +16,9 @@ cookies = requests.get(url).cookies.get_dict()
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
-# browser = webdriver.Chrome()
-browser = webdriver.Chrome(executable_path=r"C:\chromedriver.exe") #home
+browser = webdriver.Chrome()
+# browser = webdriver.Chrome(options=chrome_options)
+# browser = webdriver.Chrome(executable_path=r"C:\chromedriver.exe") #home
 
 login = sentral_dispatch_log_pass['login']
 password = sentral_dispatch_log_pass['password']
@@ -56,8 +57,12 @@ if __name__ == '__main__':
     cd_load_list = []
     cd_load_list_pu = []
     cd_load_list_del = []
+
     cd_login(login=login, password=password, url=url_login, browser=browser)
     browser.get(url)
+
+    # if browser.find_element(By.CLASS_NAME, 'card-body login-form'):
+
     whole_table = WebDriverWait(browser, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'cd-dispatch-jss230')))
     # whole_table = browser.find_element(By.CLASS_NAME, 'cd-dispatch-jss230')
     list_of_loads_elem = whole_table.find_elements(By.XPATH, 'div')

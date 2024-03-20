@@ -142,11 +142,12 @@ def main():
     # filling_sheet(sheet_name='in_terminal', f=open_file(), load_list=in_terminal_load_list)
     # filling_sheet(sheet_name='picked_up_url', f=open_file(), load_list=picked_up_load_list)
 
-    print(f'new loads - {len(new_load_list)}')
-    print(f'dispatched - {len(dispatched_load_list)}')
-    print(f'florida - {len(florida_load_list)}')
-    print(f'assigned - {len(assigned_load_list)}')
-    print('_'*10, '\n', 'total new -', len(florida_load_list) + len(dispatched_load_list) + len(new_load_list))
+
+    # print(f'new loads - {len(new_load_list)}')
+    # print(f'dispatched - {len(dispatched_load_list)}')
+    # print(f'florida - {len(florida_load_list)}')
+    # print(f'assigned - {len(assigned_load_list)}')
+    # print('_'*10, '\n', 'total new -', len(florida_load_list) + len(dispatched_load_list) + len(new_load_list))
 
     '''
     start_time = time.time()
@@ -161,8 +162,8 @@ if __name__ == '__main__':
     main()
 
 
-    # schedule.every(5).minutes.do(main)
-    schedule.every(30).seconds.do(main)
+    schedule.every(15).minutes.do(main)
+    # schedule.every(30).seconds.do(main)
     while True:
         schedule.run_pending()
     #     time.sleep(1)
