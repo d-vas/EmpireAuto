@@ -94,15 +94,11 @@ def filling_sheet(sheet_name, f, load_list):
     sheet = f.worksheet(sheet_name)
     sheet.clear()
     if load_list:
-        list_of_lists = [list(load_list[0].keys())]
+        list_of_loads = [list(load_list[0].keys())]
         for d in load_list:
-            # print(d)
-            list_of_lists.append(list(d.values()))
+            list_of_loads.append(list(d.values()))
 
-        # for k in list_of_lists:
-        #     print(k)
-
-        sheet.update('A1', list_of_lists)
+        sheet.update('A1', list_of_loads)
 
 
 def main():
@@ -160,7 +156,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 
     schedule.every(15).minutes.do(main)
     # schedule.every(30).seconds.do(main)
