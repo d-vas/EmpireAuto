@@ -22,8 +22,10 @@ headers = requests.get(url).headers
 print(headers)
 
 
-service = Service(r'C:\chromedriver.exe')
-browser = webdriver.Chrome(service=service)
+# service = Service(r'C:\chromedriver.exe')
+# browser = webdriver.Chrome(service=service)
+
+browser = webdriver.Chrome()
 
 # browser = webdriver.Chrome(executable_path=r"C:\chromedriver.exe") #home
 # browser.get(url_login)
@@ -88,6 +90,7 @@ def main():
     # end_time = time.time()
     # duration = end_time - start_time
     # print("Час виконання: {:.2f} секунд".format(duration))
+    browser.close()
 
 
 if __name__ == '__main__':
