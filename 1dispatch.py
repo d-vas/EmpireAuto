@@ -15,10 +15,10 @@ password = settings.ONE_DISP['password']
 cookies = requests.get(URL).cookies.get_dict()
 
 
-chrome_options = Options()
-chrome_options.add_argument("--headless")
-# browser = webdriver.Chrome(options=chrome_options, executable_path=r"C:\chromedriver.exe") #home
-browser = webdriver.Chrome(options=chrome_options) #work
+# chrome_options = Options()
+# chrome_options.add_argument("--headless")
+browser = webdriver.Chrome(executable_path=r"C:\chromedriver.exe") #home
+# browser = webdriver.Chrome(options=chrome_options) #work
 
 one_dispatch_list = []
 one_dispatch_list_pu = []
@@ -96,6 +96,7 @@ def getting_all_table(login, password, browser, load_list):
     one_disp_login(login, password, URL, browser)
 
     browser.find_elements(By.ID, 'CarrierViewHistory_Menu')[-1].click() #clicking btn "My Loads'
+
     browser.find_element(By.ID, "per_page_count").click() #choosing "Loads per page"
     list_of_options = browser.find_elements(By.CLASS_NAME, "t-animation-container")
     list_of_options[-1].find_elements(By.CLASS_NAME, 't-item')[-1].click() #clicking on last option in list of amounts

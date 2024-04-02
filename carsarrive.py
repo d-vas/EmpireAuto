@@ -13,12 +13,13 @@ BASE_URL = 'https://www.carsarrive.com/tab/TransportManager/Default.asp'
 login = carsarrive_log_pass['login']
 password = carsarrive_log_pass['password']
 
-
+browser = webdriver.Chrome(executable_path=r"C:\chromedriver.exe") #home
+'''
 chrome_options = Options()
 chrome_options.add_argument("--headless")
-# browser = webdriver.Chrome(executable_path=r"C:\chromedriver.exe") #home
-browser = webdriver.Chrome(options=chrome_options) #work
 
+browser = webdriver.Chrome(options=chrome_options) #work
+'''
 
 def ca_login(login, password, url, browser):
     browser.get(url)
@@ -44,3 +45,4 @@ else:
 
 '''selenium needed'''
 
+ca_login(login=login, password=password, url=BASE_URL, browser=browser)
