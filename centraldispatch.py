@@ -17,32 +17,21 @@ url = 'https://app.centraldispatch.com/dispatch'
 url_login = 'https://id.centraldispatch.com/Account/Login'
 url_main = 'centraldispatch.com'
 
+# cookies = requests.get(url).cookies.get_dict()
 headers = requests.get(url).headers
 print(headers)
+
 
 service = Service(r'C:\chromedriver.exe')
 browser = webdriver.Chrome(service=service)
 
 # browser = webdriver.Chrome(executable_path=r"C:\chromedriver.exe") #home
 # browser.get(url_login)
+# cookies = browser.get_cookies()
+# browser.add_cookie(cookies)
 
 login = sentral_dispatch_log_pass['login']
 password = sentral_dispatch_log_pass['password']
-
-
-def ex_script():
-    browser.execute_script(
-        """
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "https://app.centraldispatch.com/dispatch", true);
-        xhr.setRequestHeader('X-Amz-Cf-Id', arguments[0]['X-Amz-Cf-Id']);
-        xhr.setRequestHeader('X-Amz-Cf-Pop', arguments[0]['X-Amz-Cf-Pop']);
-        xhr.setRequestHeader('Via', arguments[0]['Via']);
-        xhr.setRequestHeader('ETag', arguments[0]['ETag']);
-        xhr.send();
-        """,
-        headers
-    )
 
 
 def cd_login(login, password, url, browser):
@@ -99,7 +88,6 @@ def main():
     # end_time = time.time()
     # duration = end_time - start_time
     # print("Час виконання: {:.2f} секунд".format(duration))
-    browser.close()
 
 
 if __name__ == '__main__':

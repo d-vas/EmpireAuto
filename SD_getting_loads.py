@@ -146,7 +146,7 @@ def main():
     filling_sheet(sheet_name='in_terminal', f=open_file(), load_list=in_terminal_load_list)
     filling_sheet(sheet_name='picked_up', f=open_file(), load_list=picked_up_load_list)
     filling_sheet(sheet_name='delivery', f=open_file(),
-        load_list=get_list_of_all_loads(new_load_list, assigned_load_list, in_terminal_load_list, picked_up_load_list))
+        load_list=get_list_of_all_loads(in_terminal_load_list, picked_up_load_list)) #new_load_list, assigned_load_list, 
 
 
     # print(f'new loads - {len(new_load_list)}')
