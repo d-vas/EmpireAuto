@@ -77,6 +77,8 @@ def main():
     whole_table = WebDriverWait(browser, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'cd-dispatch-jss230')))
     list_of_loads_elem = whole_table.find_elements(By.XPATH, 'div')
 
+    cd_load_list_pu.clear()
+
     for i in list_of_loads_elem:
         cd_load_list.append(get_load_info_from_elem(i))
 
@@ -92,7 +94,7 @@ def main():
 
 if __name__ == '__main__':
     main()
-    schedule.every(10).minutes.do(main)
-    while True:
-        schedule.run_pending()
+    # schedule.every(10).minutes.do(main)
+    # while True:
+    #     schedule.run_pending()
 

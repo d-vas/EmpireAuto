@@ -74,7 +74,7 @@ def cleance_load_dct(dct):
     dct['vehicles_count'] = len(dct['vehicles'])
     del dct['vehicles']
 
-    dct['load_info'] = f"{dct['load_id']}\n\n{dct['vins_cars']}\n\n{dct['pickup_csz']} - > {dct['delivery_csz']}"
+    dct['load_info'] = f"{dct['load_id']}\n\n{dct['customer/broker']}\n{dct['vins_cars']}\n\n{dct['pickup_csz']} - > {dct['delivery_csz']}"
 
 
 def open_file():
@@ -107,6 +107,7 @@ def filling_sheet(sheet_name, f, load_list):
 
 
 def main():
+    start_time = time.time()
     new_load_list = []
     florida_load_list = []
     dispatched_load_list = []
@@ -115,15 +116,15 @@ def main():
     in_terminal_load_list = []
 
     get_load_list(url=base_url, headers=headers, cookies=cookies, counter=1, load_list=new_load_list)
-    print('new_load_list', len(new_load_list))
+    # print('new_load_list', len(new_load_list))
     # get_dispatched_load_list(load_list=new_load_list, dispatched_list=dispatched_load_list)
     # get_florida_load_list(load_list=new_load_list, florida_load_list=florida_load_list)
     get_load_list(url=assign_url, headers=headers, cookies=cookies, counter=1, load_list=assigned_load_list)
-    print('assigned_load_list', len(assigned_load_list))
+    # print('assigned_load_list', len(assigned_load_list))
     get_load_list(url=in_terminal_url, headers=headers, cookies=cookies, counter=1, load_list=in_terminal_load_list)
-    print('in_terminal_load_list', len(in_terminal_load_list))
+    # print('in_terminal_load_list', len(in_terminal_load_list))
     get_load_list(url=picked_up_url, headers=headers, cookies=cookies, counter=1, load_list=picked_up_load_list)
-    print('picked_up_load_list', len(picked_up_load_list))
+    # print('picked_up_load_list', len(picked_up_load_list))
     for i in new_load_list:
         cleance_load_dct(i)
     for i in assigned_load_list:
@@ -155,19 +156,16 @@ def main():
     # print(f'assigned - {len(assigned_load_list)}')
     # print('_'*10, '\n', 'total new -', len(florida_load_list) + len(dispatched_load_list) + len(new_load_list))
 
-    '''
-    start_time = time.time()
-        script
     end_time = time.time()
     duration = end_time - start_time
     print("Час виконання: {:.2f} секунд".format(duration))
-    '''
+    print()
 
 
 if __name__ == '__main__':
     main()
 
-    schedule.every(15).minutes.do(main)
+    schedule.every(10).minutes.do(main)
     # schedule.every(30).seconds.do(main)
     while True:
         schedule.run_pending()
